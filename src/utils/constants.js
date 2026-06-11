@@ -4,6 +4,7 @@ export const UserRolesEnum = {
   MEMBER: "member",
 };
 
+//extract all values from the object
 export const AvailableRoles = Object.values(UserRolesEnum);
 
 export const TaskStatusEnum = {
