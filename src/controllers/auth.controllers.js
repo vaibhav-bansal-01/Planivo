@@ -58,7 +58,7 @@ const registerUser = asyncHandler(async (req, res) => {
   });
 
   const createdUser = await User.findById(user._id).select(
-    "-password -refreshToken -emailVerificationToken -emailVerificationExpiry"
+    "-password -refreshToken -emailVerificationToken -emailVerificationExpiry",
   );
 
   if (!createdUser) {
@@ -76,4 +76,51 @@ const registerUser = asyncHandler(async (req, res) => {
     );
 });
 
-export { registerUser };
+const login = asyncHandler(async (req, res) => {
+  const { email, password } = req.body();
+
+  if (!email) {
+    throw new ApiError(400, "Email is required");
+  }
+
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    throw new ApiError(400, "User dies not exist");
+  }
+
+  const isPasswordValid = await user.isPasswordCorrect(password);
+
+  if (!isPasswordValid) {
+    throw new ApiError(400, "Incorrect Password");
+  }
+
+  const { accessToken, refreshToken } = await generateJWT(user._id);
+
+  const loggesInUser = await User.findById(user._id).select(
+    "-password -refreshToken -emailVerificationToken -emailVerificationExpiry",
+  );
+
+  const options = {
+    httpOnly: true,
+    secure: true,
+  };
+
+  return res
+    .status(200)
+    .cookie("accessToken", accessToken, options)
+    .cookie("refreshToken", refreshToken, options)
+    .json(
+      new ApiResponse(
+        200,
+        {
+          user: loggesInUser,
+          accessToken,
+          refreshToken,
+        },
+        "Logged in successfully",
+      ),
+    );
+});
+
+export { registerUser, login };

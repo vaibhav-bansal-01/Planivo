@@ -1,5 +1,7 @@
 import express from "express";
 import cors from "cors";
+import cookieParser from "cookie-parser";
+
 const app = express();
 
 //basic configuration
@@ -12,6 +14,8 @@ app.use(express.urlencoded({ extended: true, limit: "16kb" }));
 
 //images part should be pucblicly viewable
 app.use(express.static("public"));
+
+app.use(cookieParser());
 
 //cors configuration allows which frontend website are aloowed to talk to my backend
 app.use(
