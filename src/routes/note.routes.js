@@ -5,7 +5,7 @@ import {
   createNotes,
   deleteNotes,
   updateNotes,
-} from "../controllers/projects.controllers.js";
+} from "../controllers/notes.controllers.js";
 import { validate } from "../middlewares/validators.middleware.js";
 import { createNoteValidator } from "../validators/index.js";
 import {

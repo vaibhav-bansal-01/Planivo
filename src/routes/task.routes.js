@@ -8,7 +8,7 @@ import {
   updateTask,
   getTaskById,
   getTasks,
-} from "../controllers/projects.controllers.js";
+} from "../controllers/task.controllers.js";
 import { validate } from "../middlewares/validators.middleware.js";
 import {
   createTaskValidator,
