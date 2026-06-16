@@ -32,8 +32,8 @@ router
 router  
     .route("/:projectId")
     .get(validateProjectPermission(AvailableRoles), getProjectById)
-    .put(validateProjectPermission([UserRolesEnum.ADMIN, UserRolesEnum.PROJECT_ADMIN]), createProjectValidator(), updateProject)
-    .delete(validateProjectPermission([UserRolesEnum.ADMIN, UserRolesEnum.PROJECT_ADMIN]), deleteProject)
+    .put(validateProjectPermission([UserRolesEnum.ADMIN]), createProjectValidator(), updateProject)
+    .delete(validateProjectPermission([UserRolesEnum.ADMIN]), deleteProject)
 
 router
     .route("/:projectId/members")
