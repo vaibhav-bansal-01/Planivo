@@ -9,6 +9,34 @@ import mongoose, { Aggregate } from "mongoose";
 import { AvailableTaskStatus } from "../utils/constants.js";
 import { AvailableTasksPriority } from "../utils/constants.js";
 
+import mongoose from "mongoose";
+import { asyncHandler } from "../utils/asyncHandler.js";
+import { ApiResponse } from "../utils/ApiResponse.js";
+import { ProjectMember } from "../models/projectMember.model.js";
+import { Task } from "../models/task.model.js";
+
+const getUserTasks = asyncHandler(async (req, res) => {
+  // Find all projects the user belongs to
+  const memberships = await ProjectMember.find({
+    user: req.user._id,
+  }).select("project");
+
+  const projectIds = memberships.map((membership) => membership.project);
+
+  // Fetch all tasks from those projects
+  const tasks = await Task.find({
+    project: { $in: projectIds },
+  })
+    .populate("project", "name")
+    .populate("assignedTo", "username avatar")
+    .populate("assignedBy", "username")
+    .sort({ createdAt: -1 });
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, { tasks }, "Tasks fetched successfully"));
+});
+
 const getTasks = asyncHandler(async (req, res) => {
   const { projectId } = req.params;
 
@@ -286,4 +314,5 @@ export {
   updateTask,
   getTaskById,
   getTasks,
+  getUserTasks,
 };

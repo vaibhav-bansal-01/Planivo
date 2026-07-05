@@ -1,5 +1,9 @@
 import api from "./axios";
 
+export const getUserTasks = () => {
+  return api.get("/tasks");
+};
+
 export const getProjectTasks = (projectId) => {
   return api.get("/tasks");
 };
