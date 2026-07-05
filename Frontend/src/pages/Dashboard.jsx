@@ -10,8 +10,26 @@ import { FolderOpen, ListTodo, Clock3, CircleCheck } from "lucide-react";
 import TASK_STATUS from "../utils/constants";
 
 function Dashboard() {
-  const [tasks] = useState([]);
-  const [projects] = useState([]);
+  const [tasks, setTasks] = useState([]);
+  const [projects, setProjects] = useState([]);
+
+  const fetchDashboard = async () => {
+    try {
+      const [tasksResponse, projectsResponse] = await Promise.all([
+        getUserTasks(),
+        getUserProjects(),
+      ]);
+
+      setTasks(tasksResponse.data.data.tasks);
+      setProjects(projectsResponse.data.data.projects);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchDashboard();
+  }, []);
 
   const stats = [
     {

@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { SidebarItem, Logo } from "../index.js";
+import { SidebarItem, Logo, ProjectListItem } from "../index.js";
 
 import {
   LayoutDashboard,
@@ -14,6 +14,21 @@ import {
 } from "lucide-react";
 
 function Sidebar() {
+  const [projects, setProjects] = useState([]);
+
+  const fetchProjects = async () => {
+    try {
+      const response = await getUserProjects();
+      setProjects(response.data.data.projects);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchProjects();
+  }, []);
+
   return (
     <aside className="flex h-screen w-80 shrink-0 flex-col border-r border-gray-200 bg-white px-6 py-8">
       {/* ---------- Logo ---------- */}
@@ -64,7 +79,9 @@ function Sidebar() {
         </div>
 
         <div className="space-y-2">
-          {/* Map Projects Here */}
+          {projects.slice(0, 5).map((project) => (
+            <ProjectListItem key={project._id} project={project} />
+          ))}
         </div>
 
         <Link
@@ -88,16 +105,11 @@ function Sidebar() {
                 {user?.name}
               </p>
 
-              <p className="text-xs text-gray-500">
-                View Profile
-              </p>
+              <p className="text-xs text-gray-500">View Profile</p>
             </div>
           </div>
 
-          <ChevronDown
-            size={18}
-            className="text-gray-500"
-          />
+          <ChevronDown size={18} className="text-gray-500" />
         </button>
       </section>
     </aside>

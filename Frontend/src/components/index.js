@@ -10,6 +10,7 @@ import SectionHeader from "./comman/SectionHeader";
 import ProjectCard from "./comman/ProjectCard";
 import TaskItem from "./comman/TaskItem";
 import TaskCard from "./comman/TAskCard";
+import ProjectListItem from "./comman/ProjectListItem";
 
 export {
   Button,
@@ -24,4 +25,5 @@ export {
   ProjectCard,
   TaskItem,
   TaskCard,
+  ProjectListItem,
 };
