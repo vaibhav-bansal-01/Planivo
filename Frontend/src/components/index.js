@@ -11,6 +11,7 @@ import ProjectCard from "./comman/ProjectCard";
 import TaskItem from "./comman/TaskItem";
 import TaskCard from "./comman/TAskCard";
 import ProjectListItem from "./comman/ProjectListItem";
+import ProjectRow from "./comman/ProjectRow";
 
 export {
   Button,
@@ -26,4 +27,5 @@ export {
   TaskItem,
   TaskCard,
   ProjectListItem,
+  ProjectRow,
 };

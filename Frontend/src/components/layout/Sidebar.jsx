@@ -1,7 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { SidebarItem, Logo, ProjectListItem } from "../index.js";
-
+import {getUserProjects} from "../../api/projectApi";
+import {getUserTasks} from "../../api/tasksApi";
 import {
   LayoutDashboard,
   FolderOpen,
