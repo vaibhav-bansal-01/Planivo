@@ -14,3 +14,11 @@ export const TaskStatusEnum = {
 };
 
 export const AvailableTaskStatus = Object.values(TaskStatusEnum);
+
+export const TasksPriorityEnum = {
+  LOW: "low",
+  MEDIUM: "medium",
+  HIGH: "high",
+};
+
+export const AvailableTasksPriority = Object.values(TasksPriorityEnum);

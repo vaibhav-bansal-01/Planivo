@@ -7,6 +7,7 @@ import { ApiError } from "../utils/api-error.js";
 import { asyncHandler } from "../utils/async-handler.js";
 import mongoose, { Aggregate } from "mongoose";
 import { AvailableTaskStatus } from "../utils/constants.js";
+import { AvailableTasksPriority } from "../utils/constants.js";
 
 const getTasks = asyncHandler(async (req, res) => {
   const { projectId } = req.params;
@@ -27,7 +28,8 @@ const getTasks = asyncHandler(async (req, res) => {
 });
 
 const createTask = asyncHandler(async (req, res) => {
-  const { title, description, assignedTo, status } = req.body;
+  const { title, description, assignedTo, status, priority, dueDate } =
+    req.body;
   const { projectId } = req.params;
 
   const project = await Project.findById(projectId);
@@ -54,6 +56,8 @@ const createTask = asyncHandler(async (req, res) => {
       ? new mongoose.Types.ObjectId(assignedTo)
       : undefined,
     status,
+    priority,
+    dueDate,
     assignedBy: new mongoose.Types.ObjectId(req.user._id),
     attachments,
   });
@@ -144,11 +148,15 @@ const getTaskById = asyncHandler(async (req, res) => {
 });
 
 const updateTask = asyncHandler(async (req, res) => {
-  const { title, description, status, assignedTo } = req.body;
+  const { title, description, status, assignedTo, priority } = req.body;
   const { taskId } = req.params;
 
   if (status && !AvailableTaskStatus.includes(status)) {
     throw new ApiError(400, "Status invalid");
+  }
+
+  if (priority && !AvailableTasksPriority.includes(priority)) {
+    throw new ApiError(400, "Priority invalid");
   }
 
   const files = req.files || [];
@@ -168,6 +176,10 @@ const updateTask = asyncHandler(async (req, res) => {
   if (description) updateData.description = description;
 
   if (status) updateData.status = status;
+
+  if (priority) updateData.priority = priority;
+
+  if (dueDate) updateData.dueDate = dueDate;
 
   if (assignedTo)
     updateData.assignedTo = new mongoose.Types.ObjectId(assignedTo);
@@ -260,9 +272,9 @@ const deleteSubTask = asyncHandler(async (req, res) => {
     throw new ApiError(404, "Subtask not found");
   }
 
-  return res.status(200).json(
-    new ApiResponse(200, {}, "Subtask deleted successfully"),
-  );
+  return res
+    .status(200)
+    .json(new ApiResponse(200, {}, "Subtask deleted successfully"));
 });
 
 export {
