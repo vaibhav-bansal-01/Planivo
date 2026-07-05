@@ -7,6 +7,9 @@ import SidebarItem from "./layout/SidebarItem";
 import Header from "./layout/Header";
 import StatsCard from "./comman/StatsCard";
 import SectionHeader from "./comman/SectionHeader";
+import ProjectCard from "./comman/ProjectCard";
+import TaskItem from "./comman/TaskItem";
+import TaskCard from "./comman/TAskCard";
 
 export {
   Button,
@@ -18,4 +21,7 @@ export {
   Header,
   StatsCard,
   SectionHeader,
+  ProjectCard,
+  TaskItem,
+  TaskCard,
 };
