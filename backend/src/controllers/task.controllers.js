@@ -17,11 +17,9 @@ import { Task } from "../models/task.model.js";
 
 const getUserTasks = asyncHandler(async (req, res) => {
   // Find all projects the user belongs to
-  const memberships = await ProjectMember.find({
+  const projectIds = await ProjectMember.distinct("project", {
     user: req.user._id,
-  }).select("project");
-
-  const projectIds = memberships.map((membership) => membership.project);
+  });
 
   // Fetch all tasks from those projects
   const tasks = await Task.find({
