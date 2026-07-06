@@ -12,6 +12,10 @@ import TaskItem from "./comman/TaskItem";
 import TaskCard from "./comman/TAskCard";
 import ProjectListItem from "./comman/ProjectListItem";
 import ProjectRow from "./comman/ProjectRow";
+import ProgressBar from "./ui/ProgressBar";
+import NoteItem from "./comman/NoteItem";
+import NoteCard from "./comman/NoteCard";
+import SubTaskItem from "./comman/SubTaskItem";
 
 export {
   Button,
@@ -28,4 +32,8 @@ export {
   TaskCard,
   ProjectListItem,
   ProjectRow,
+  ProgressBar,
+  NoteItem,
+  NoteCard,
+  SubTaskItem,
 };
