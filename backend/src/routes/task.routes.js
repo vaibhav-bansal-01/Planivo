@@ -9,6 +9,7 @@ import {
   getTaskById,
   getTasks,
   getUserTasks,
+  getSubTasksByTaskId,
 } from "../controllers/task.controllers.js";
 import { validate } from "../middlewares/validators.middleware.js";
 import {
@@ -66,7 +67,8 @@ router
     ]),
     createSubtaskValidator(),
     createSubTask,
-  );
+  )
+  .get(getSubTasksByTaskId);
 
 router
   .route("/:projectId/st/:subtaskId")

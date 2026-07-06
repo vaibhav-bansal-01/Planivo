@@ -303,6 +303,18 @@ const deleteSubTask = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, {}, "Subtask deleted successfully"));
 });
 
+const getSubTasksByTaskId = asyncHandler(async (req, res) => {
+  const { taskId } = req.params;
+
+  const subtasks = await SubTask.find({ task: taskId })
+    .populate("createdBy", "username avatar")
+    .sort({ createdAt: -1 });
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, { subtasks }, "Subtasks fetched successfully"));
+});
+
 export {
   createSubTask,
   createTask,
@@ -313,4 +325,5 @@ export {
   getTaskById,
   getTasks,
   getUserTasks,
+  getSubTasksByTaskId,
 };
