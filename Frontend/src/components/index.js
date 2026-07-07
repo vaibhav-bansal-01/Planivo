@@ -18,6 +18,11 @@ import NoteCard from "./comman/NoteCard";
 import SubTaskItem from "./comman/SubTaskItem";
 import SubTaskCard from "./comman/SubTaskCard";
 import AvatarGroup from "./ui/AvatarGroup";
+import ProjectHero from "./ui/ProjectHero";
+import TaskRow from "./comman/TaskRow";
+import TaskHero from "./comman/TaskHero";
+import TaskInfoCard from "./comman/TaskInfoCard";
+import AttachmentCard from "./comman/AttachmentCard";
 
 export {
   Button,
@@ -40,4 +45,9 @@ export {
   SubTaskItem,
   SubTaskCard,
   AvatarGroup,
+  ProjectHero,
+  TaskRow,
+  TaskHero,
+  TaskInfoCard,
+  AttachmentCard,
 };

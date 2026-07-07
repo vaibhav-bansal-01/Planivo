@@ -1,8 +1,8 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { SidebarItem, Logo, ProjectListItem } from "../index.js";
-import {getUserProjects} from "../../api/projectApi";
-import {getUserTasks} from "../../api/tasksApi";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { SidebarItem, Logo, ProjectListItem, Input } from "../index.js";
+import { getUserProjects, createProject } from "../../api/projectApi";
+import { getUserTasks } from "../../api/tasksApi";
 import {
   LayoutDashboard,
   FolderOpen,
@@ -16,6 +16,9 @@ import {
 
 function Sidebar() {
   const [projects, setProjects] = useState([]);
+  const [isCreatingProject, setIsCreatingProject] = useState(false);
+  const [projectName, setProjectName] = useState("");
+  const navigate = useNavigate();
 
   const fetchProjects = async () => {
     try {
@@ -29,6 +32,25 @@ function Sidebar() {
   useEffect(() => {
     fetchProjects();
   }, []);
+
+  const handleAddProject = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await createProject({
+        name: projectName,
+      });
+
+      setProjects((prev) => [...prev, response.data.data.project]);
+
+      setProjectName("");
+      setIsCreatingProject(false);
+
+      navigate(`/projects/${response.data.data.project._id}`);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <aside className="flex h-screen w-80 shrink-0 flex-col border-r border-gray-200 bg-white px-6 py-8">
@@ -59,10 +81,6 @@ function Sidebar() {
           <SidebarItem to="/calendar" icon={CalendarDays}>
             Calendar
           </SidebarItem>
-
-          <SidebarItem to="/notes" icon={NotebookPen}>
-            Notes
-          </SidebarItem>
         </nav>
       </section>
 
@@ -73,9 +91,11 @@ function Sidebar() {
             Projects
           </p>
 
-          <button className="flex items-center gap-2 rounded-xl px-2 py-1 text-sm font-medium text-blue-600 transition hover:bg-blue-50">
-            <Plus size={16} />
-            New
+          <button
+            className="flex items-center gap-2 rounded-xl px-2 py-1 text-sm font-medium text-blue-600 transition hover:bg-blue-50"
+            onClick={() => setIsCreatingProject(true)}
+          >
+            <Plus size={16} />+ Add Project
           </button>
         </div>
 
@@ -83,6 +103,22 @@ function Sidebar() {
           {projects.slice(0, 5).map((project) => (
             <ProjectListItem key={project._id} project={project} />
           ))}
+          {isCreatingProject && (
+            <form onSubmit={handleAddProject}>
+              <Input
+                autoFocus
+                placeholder="New project..."
+                value={projectName}
+                onChange={(e) => setProjectName(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Escape") {
+                    setIsCreatingProject(false);
+                    setProjectName("");
+                  }
+                }}
+              />
+            </form>
+          )}
         </div>
 
         <Link

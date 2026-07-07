@@ -25,12 +25,12 @@ function ProjectRow({ project, progress }) {
           className="flex items-center gap-4"
         >
           <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-100 text-lg font-semibold text-blue-600">
-            {project.name?.charAt(0).toUpperCase()}
+            {project.title?.charAt(0).toUpperCase()}
           </div>
 
           <div className="min-w-0">
             <h3 className="truncate font-semibold text-gray-900">
-              {project.name}
+              {project.title}
             </h3>
 
             <p className="line-clamp-2 text-sm text-gray-500">

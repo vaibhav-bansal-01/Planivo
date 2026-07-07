@@ -10,6 +10,8 @@ import {
   getTasks,
   getUserTasks,
   getSubTasksByTaskId,
+  removeAttachment,
+  addAttachments,
 } from "../controllers/task.controllers.js";
 import { validate } from "../middlewares/validators.middleware.js";
 import {
@@ -56,6 +58,27 @@ router
       UserRolesEnum.PROJECT_ADMIN,
     ]),
     deleteTask,
+  );
+
+router
+  .route("/:projectId/t/:taskId/attachments")
+  .post(
+    validateProjectPermission([
+      UserRolesEnum.ADMIN,
+      UserRolesEnum.PROJECT_ADMIN,
+    ]),
+    upload.array("attachments"),
+    addAttachments,
+  );
+
+router
+  .route("/:projectId/t/:taskId/attachments/:attachmentId")
+  .delete(
+    validateProjectPermission([
+      UserRolesEnum.ADMIN,
+      UserRolesEnum.PROJECT_ADMIN,
+    ]),
+    removeAttachment,
   );
 
 router

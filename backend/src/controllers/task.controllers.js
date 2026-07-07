@@ -174,7 +174,9 @@ const getTaskById = asyncHandler(async (req, res) => {
 });
 
 const updateTask = asyncHandler(async (req, res) => {
-  const { title, description, status, assignedTo, priority } = req.body;
+  const { title, description, status, assignedTo, priority, dueDate } =
+    req.body;
+
   const { taskId } = req.params;
 
   if (status && !AvailableTaskStatus.includes(status)) {
@@ -184,16 +186,6 @@ const updateTask = asyncHandler(async (req, res) => {
   if (priority && !AvailableTasksPriority.includes(priority)) {
     throw new ApiError(400, "Priority invalid");
   }
-
-  const files = req.files || [];
-
-  const attachments = files.map((file) => {
-    return {
-      url: `${process.env.SERVER_URL}/images/${file.originalname}`,
-      mimetype: file.mimetype,
-      size: file.size,
-    };
-  });
 
   const updateData = {};
 
@@ -207,10 +199,9 @@ const updateTask = asyncHandler(async (req, res) => {
 
   if (dueDate) updateData.dueDate = dueDate;
 
-  if (assignedTo)
+  if (assignedTo) {
     updateData.assignedTo = new mongoose.Types.ObjectId(assignedTo);
-
-  if (attachments.length > 0) updateData.attachments = attachments;
+  }
 
   const task = await Task.findByIdAndUpdate(taskId, updateData, {
     new: true,
@@ -315,6 +306,57 @@ const getSubTasksByTaskId = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, { subtasks }, "Subtasks fetched successfully"));
 });
 
+const addAttachments = asyncHandler(async (req, res) => {
+  const { taskId } = req.params;
+
+  const task = await Task.findById(taskId);
+
+  if (!task) {
+    throw new ApiError(404, "Task not found");
+  }
+
+  const files = req.files || [];
+
+  if (files.length === 0) {
+    throw new ApiError(400, "No files uploaded");
+  }
+
+  const attachments = files.map((file) => ({
+    _id: new mongoose.Types.ObjectId(),
+    url: `${process.env.SERVER_URL}/images/${file.originalname}`,
+    mimetype: file.mimetype,
+    size: file.size,
+  }));
+
+  task.attachments.push(...attachments);
+
+  await task.save();
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, task, "Attachments uploaded successfully"));
+});
+
+const removeAttachment = asyncHandler(async (req, res) => {
+  const { taskId, attachmentId } = req.params;
+
+  const task = await Task.findById(taskId);
+
+  if (!task) {
+    throw new ApiError(404, "Task not found");
+  }
+
+  task.attachments = task.attachments.filter(
+    (attachment) => attachment._id.toString() !== attachmentId,
+  );
+
+  await task.save();
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, task, "Attachment removed successfully"));
+});
+
 export {
   createSubTask,
   createTask,
@@ -326,4 +368,6 @@ export {
   getTasks,
   getUserTasks,
   getSubTasksByTaskId,
+  addAttachments,
+  removeAttachment,
 };

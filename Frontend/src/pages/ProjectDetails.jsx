@@ -7,18 +7,15 @@ import {
   Card,
   TaskCard,
   ProgressBar,
-  AvatarGroup,
   NoteCard,
+  ProjectHero,
 } from "../components/index.js";
-
 import { ListTodo, Clock3, CircleCheck } from "lucide-react";
-
 import {
   getProjectById,
   getProjectTasks,
   getProjectMembers,
 } from "../api/projectApi";
-
 import TASK_STATUS from "../constants/taskStatus";
 
 function ProjectDetails() {
@@ -40,7 +37,9 @@ function ProjectDetails() {
           getProjectMembers(projectId),
         ]);
 
-        setProject(projectRes.data.data.project);
+        const fetchedProject = projectRes.data.data.project;
+
+        setProject(fetchedProject);
         setTasks(tasksRes.data.data.tasks);
         setMembers(membersRes.data.data.members);
       } catch (error) {
@@ -111,18 +110,15 @@ function ProjectDetails() {
 
   return (
     <div className="space-y-8">
-      <Header title={project.name} subtitle={project.description} />
+      <Header />
 
       {/* Hero */}
-      <Card>
-        <div className="flex items-center justify-between">
-          <div>
-            <AvatarGroup members={members} count={4} />
-          </div>
-
-          <Button>Manage Members</Button>
-        </div>
-      </Card>
+      <ProjectHero
+        project={project}
+        projectId={projectId}
+        members={members}
+        setProject={setProject}
+      />
 
       {/* Stats */}
       <section className="grid grid-cols-3 gap-6">

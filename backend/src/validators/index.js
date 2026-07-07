@@ -94,7 +94,6 @@ const createTaskValidator = () => {
   return [
     body("title").trim().notEmpty().withMessage("Title is required"),
     body("description").optional(),
-    
   ];
 };
 
