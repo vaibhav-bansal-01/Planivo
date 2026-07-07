@@ -26,7 +26,11 @@ export const addMemberToProject = (projectId, data) => {
 
 export const removeMemberFromProject = (projectId, memberId) => {
   return api.delete(`/projects/${projectId}/members/${memberId}`);
-};  
+};
+
+export const getProjectMembers = (projectId) => {
+  return api.get(`/projects/${projectId}/members`);
+};
 
 export const getProjectTasks = (projectId) => {
   return api.get(`/projects/${projectId}/tasks`);

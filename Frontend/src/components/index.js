@@ -9,13 +9,15 @@ import StatsCard from "./comman/StatsCard";
 import SectionHeader from "./comman/SectionHeader";
 import ProjectCard from "./comman/ProjectCard";
 import TaskItem from "./comman/TaskItem";
-import TaskCard from "./comman/TAskCard";
+import TaskCard from "./comman/TaskCard";
 import ProjectListItem from "./comman/ProjectListItem";
 import ProjectRow from "./comman/ProjectRow";
 import ProgressBar from "./ui/ProgressBar";
 import NoteItem from "./comman/NoteItem";
 import NoteCard from "./comman/NoteCard";
 import SubTaskItem from "./comman/SubTaskItem";
+import SubTaskCard from "./comman/SubTaskCard";
+import AvatarGroup from "./ui/AvatarGroup";
 
 export {
   Button,
@@ -36,4 +38,6 @@ export {
   NoteItem,
   NoteCard,
   SubTaskItem,
+  SubTaskCard,
+  AvatarGroup,
 };

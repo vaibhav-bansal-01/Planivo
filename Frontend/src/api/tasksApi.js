@@ -35,3 +35,7 @@ export const updateSubTask = (subtaskId, data) => {
 export const deleteSubTask = (subtaskId) => {
   return api.delete(`/subtasks/${subtaskId}`);
 };  
+
+export const getSubTasksByTaskId = (taskId) => {
+  return api.get(`/subtasks/${taskId}`);
+};
