@@ -67,7 +67,7 @@ router
       UserRolesEnum.ADMIN,
       UserRolesEnum.PROJECT_ADMIN,
     ]),
-    upload.array("attachments"),
+    upload.array("attachments", 5),
     addAttachments,
   );
 

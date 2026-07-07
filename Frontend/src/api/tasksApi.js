@@ -39,3 +39,11 @@ export const deleteSubTask = (subtaskId) => {
 export const getSubTasksByTaskId = (taskId) => {
   return api.get(`/subtasks/${taskId}`);
 };
+
+export const addAttachments = (taskId, data) => {
+  return api.post(`/tasks/${taskId}/attachments`, data);
+};
+
+export const removeAttachment = (taskId, attachmentId) => {
+  return api.delete(`/tasks/${taskId}/attachments/${attachmentId}`);
+};  
