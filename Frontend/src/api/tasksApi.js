@@ -34,16 +34,26 @@ export const updateSubTask = (subtaskId, data) => {
 
 export const deleteSubTask = (subtaskId) => {
   return api.delete(`/subtasks/${subtaskId}`);
-};  
+};
 
 export const getSubTasksByTaskId = (taskId) => {
   return api.get(`/subtasks/${taskId}`);
 };
 
-export const addAttachments = (taskId, data) => {
-  return api.post(`/tasks/${taskId}/attachments`, data);
+export const addAttachments = (projectId, taskId, formData) => {
+  return api.post(
+    `/projects/${projectId}/tasks/${taskId}/attachments`,
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    },
+  );
 };
 
-export const removeAttachment = (taskId, attachmentId) => {
-  return api.delete(`/tasks/${taskId}/attachments/${attachmentId}`);
-};  
+export const removeAttachment = (projectId, taskId, attachmentId) => {
+  return api.delete(
+    `/projects/${projectId}/tasks/${taskId}/attachments/${attachmentId}`,
+  );
+};

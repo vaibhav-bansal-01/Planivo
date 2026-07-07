@@ -8,7 +8,7 @@ function AttachmentCard({ task, setTask }) {
     try {
       const files = Array.from(e.target.files);
 
-      if (files.length === 0) return;
+      if (!files.length) return;
 
       const formData = new FormData();
 
@@ -23,6 +23,8 @@ function AttachmentCard({ task, setTask }) {
       );
 
       setTask(response.data.data);
+
+      e.target.value = "";
     } catch (error) {
       console.error(error);
     }
@@ -42,12 +44,26 @@ function AttachmentCard({ task, setTask }) {
     }
   };
 
+  const getFileIcon = (mimetype) => {
+    if (mimetype.startsWith("image/")) return <ImageIcon />;
+    if (mimetype === "application/pdf") return <FileText />;
+    return <Paperclip />;
+  };
+
+  const formatFileSize = (bytes) => {
+    if (bytes < 1024) return `${bytes} B`;
+
+    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+
+    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+  };
+
   return (
     <Card>
       <div className="mb-6 flex items-center justify-between">
         <h2 className="text-lg font-semibold text-gray-900">Attachments</h2>
 
-        <label>
+        <label className="cursor-pointer">
           <input
             type="file"
             multiple
@@ -55,7 +71,7 @@ function AttachmentCard({ task, setTask }) {
             onChange={handleUpload}
           />
 
-          <Button className="cursor-pointer" as="span">
+          <Button as="span">
             <Upload size={16} />
             Upload
           </Button>
@@ -76,7 +92,7 @@ function AttachmentCard({ task, setTask }) {
               className="flex items-center justify-between rounded-xl border border-gray-200 p-4"
             >
               <div className="flex items-center gap-3">
-                <Paperclip size={18} className="text-gray-500" />
+                {getFileIcon(attachment.mimetype)}
 
                 <div>
                   <p className="font-medium text-gray-900">
@@ -84,7 +100,7 @@ function AttachmentCard({ task, setTask }) {
                   </p>
 
                   <p className="text-xs text-gray-500">
-                    {(attachment.size / 1024).toFixed(1)} KB
+                    {formatFileSize(attachment.size)}
                   </p>
                 </div>
               </div>
