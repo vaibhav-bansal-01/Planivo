@@ -63,7 +63,7 @@ function TaskDetails() {
 
           <SubTaskCard taskId={taskId} projectId={projectId} />
 
-          <AttachmentCard task={task} />
+          <AttachmentCard task={task} setTask={setTask} />
         </div>
 
         {/* Right Column */}

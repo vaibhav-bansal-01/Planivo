@@ -17,6 +17,8 @@ app.use(express.static("public"));
 
 app.use(cookieParser());
 
+app.use("/images", express.static("public/images"));
+
 //cors configuration allows which frontend website are aloowed to talk to my backend
 app.use(
   cors({

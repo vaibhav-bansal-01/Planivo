@@ -322,8 +322,8 @@ const addAttachments = asyncHandler(async (req, res) => {
   }
 
   const attachments = files.map((file) => ({
-    _id: new mongoose.Types.ObjectId(),
-    url: `${process.env.SERVER_URL}/images/${file.originalname}`,
+    name: file.originalname,
+    url: `${process.env.SERVER_URL}/images/${file.filename}`,
     mimetype: file.mimetype,
     size: file.size,
   }));
@@ -346,9 +346,13 @@ const removeAttachment = asyncHandler(async (req, res) => {
     throw new ApiError(404, "Task not found");
   }
 
-  task.attachments = task.attachments.filter(
-    (attachment) => attachment._id.toString() !== attachmentId,
-  );
+  const attachment = task.attachments.id(attachmentId);
+
+  if (!attachment) {
+    throw new ApiError(404, "Attachment not found");
+  }
+
+  task.attachments.pull(attachmentId);
 
   await task.save();
 
