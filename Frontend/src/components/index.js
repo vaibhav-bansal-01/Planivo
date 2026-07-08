@@ -21,8 +21,10 @@ import AvatarGroup from "./ui/AvatarGroup";
 import ProjectHero from "./ui/ProjectHero";
 import TaskRow from "./comman/TaskRow";
 import TaskHero from "./comman/TaskHero";
-import TaskInfoCard from "./comman/TaskInfoCard";
+import TaskInfo from "./comman/TaskInfo";
 import AttachmentCard from "./comman/AttachmentCard";
+import ManageMembersModal from "./comman/ManageMembersModal";
+import MemberItem from "./comman/MemberItem";
 
 export {
   Button,
@@ -48,6 +50,8 @@ export {
   ProjectHero,
   TaskRow,
   TaskHero,
-  TaskInfoCard,
+  TaskInfo,
   AttachmentCard,
+  ManageMembersModal,
+  MemberItem,
 };

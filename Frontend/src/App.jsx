@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import AppRoutes from "./routes/AppRoutes";
 import { getCurrentUser } from "./api/authApi";
-import { loginSuccess, logout, setInitialized } from "./features/authSlice";
+import { loginSuccess, logout, setInitialized } from "./features/authSlics.js";
 import "./App.css";
 
 function App() {

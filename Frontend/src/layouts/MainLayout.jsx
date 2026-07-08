@@ -3,13 +3,12 @@ import { Sidebar, Header } from "../components/index.js";
 
 function MainLayout() {
   return (
-    <>
+    <div className="flex">
       <Sidebar />
-      <div className="flex1">
-        <Header />
+      <main className="flex-1">
         <Outlet />
-      </div>
-    </>
+      </main>
+    </div>
   );
 }
 

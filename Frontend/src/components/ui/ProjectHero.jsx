@@ -1,21 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { AvatarGroup } from "../index.js";
-import { MoreVertical } from "lucide-react";
-import { Card, Button, Input } from "../index.js";
+import { AvatarGroup, Button, Card, Input, ManageMembersModal } from "../index.js";
+import { MoreVertical, Users } from "lucide-react";
+
 import { updateProject, deleteProject } from "../../api/projectApi";
 
 function ProjectHero({ project, projectId, members, setProject }) {
+  const navigate = useNavigate();
+
   const [isEditing, setIsEditing] = useState(false);
   const [projectName, setProjectName] = useState("");
   const [projectDescription, setProjectDescription] = useState("");
   const [showMenu, setShowMenu] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const hasChanges =
-    projectName !== project.name ||
-    projectDescription !== (project.description || "");
-
-  const navigate = useNavigate();
+  const [showMembersModal, setShowMembersModal] = useState(false);
 
   useEffect(() => {
     if (project) {
@@ -24,19 +22,21 @@ function ProjectHero({ project, projectId, members, setProject }) {
     }
   }, [project]);
 
+  const hasChanges =
+    projectName !== project.name ||
+    projectDescription !== (project.description || "");
+
   const handleUpdateProject = async () => {
     try {
       if (!projectName.trim()) return;
+
       const response = await updateProject(projectId, {
         name: projectName,
         description: projectDescription,
       });
 
-      const updatedProject = response.data.data.project;
+      setProject(response.data.data);
 
-      setProject(updatedProject);
-      setProjectName(updatedProject.name);
-      setProjectDescription(updatedProject.description || "");
       setIsEditing(false);
       setShowMenu(false);
     } catch (error) {
@@ -48,8 +48,6 @@ function ProjectHero({ project, projectId, members, setProject }) {
     try {
       await deleteProject(projectId);
 
-      setShowDeleteModal(false);
-
       navigate("/projects");
     } catch (error) {
       console.error(error);
@@ -58,127 +56,161 @@ function ProjectHero({ project, projectId, members, setProject }) {
 
   return (
     <>
-      <Card>
-        <div className="flex items-start justify-between gap-8">
-          <div className="flex-1">
-            {isEditing ? (
-              <>
-                <Input
-                  type="text"
-                  value={projectName}
-                  onChange={(e) => setProjectName(e.target.value)}
-                  className="w-full rounded-lg border border-gray-300 px-4 py-2 text-3xl font-bold outline-none focus:border-blue-500"
-                />
+      <Card className="h-full">
+        <div className="flex h-full flex-col justify-between">
+          {/* TOP */}
+          <div className="flex justify-between gap-6">
+            <div className="flex gap-5">
+              {/* Avatar */}
+              <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl bg-blue-600 text-4xl font-bold text-white shadow">
+                {project.name.charAt(0).toUpperCase()}
+              </div>
 
-                <textarea
-                  rows={5}
-                  value={projectDescription}
-                  onChange={(e) => setProjectDescription(e.target.value)}
-                  placeholder="Add a description..."
-                  className="mt-4 w-full resize-none rounded-lg border border-gray-300 px-4 py-3 text-gray-700 outline-none focus:border-blue-500"
-                />
-              </>
-            ) : (
-              <>
-                <h1 className="text-3xl font-bold text-gray-900">
-                  {project.name}
-                </h1>
+              {/* Name + Description */}
+              <div className="flex-1">
+                {isEditing ? (
+                  <>
+                    <Input
+                      value={projectName}
+                      onChange={(e) => setProjectName(e.target.value)}
+                      className="text-3xl font-bold"
+                    />
 
-                <p className="mt-3 text-gray-600">
-                  {project.description || "No description yet."}
-                </p>
-              </>
-            )}
-          </div>
+                    <textarea
+                      rows={4}
+                      value={projectDescription}
+                      onChange={(e) => setProjectDescription(e.target.value)}
+                      className="mt-4 w-full rounded-xl border border-gray-300 p-4 outline-none focus:border-blue-500"
+                      placeholder="Project description..."
+                    />
+                  </>
+                ) : (
+                  <>
+                    <h1 className="text-4xl font-bold text-gray-900">
+                      {project.name}
+                    </h1>
 
-          {isEditing ? (
-            <div className="ml-6 flex gap-3">
-              <Button
-                variant="secondary"
-                onClick={() => {
-                  setProjectName(project.name);
-                  setProjectDescription(project.description || "");
-                  setIsEditing(false);
-                }}
-              >
-                Cancel
-              </Button>
-
-              <Button disabled={!hasChanges} onClick={handleUpdateProject}>
-                Save Changes
-              </Button>
+                    <p className="mt-4 max-w-lg text-lg leading-8 text-gray-600">
+                      {project.description || "No description yet."}
+                    </p>
+                  </>
+                )}
+              </div>
             </div>
-          ) : (
+
+            {/* MENU */}
             <div className="relative">
-              <button
-                onClick={() => setShowMenu((prev) => !prev)}
-                className="rounded-xl p-2 transition hover:bg-gray-100"
-              >
-                <MoreVertical size={20} />
-              </button>
-
-              {showMenu && (
-                <div className="absolute right-0 mt-2 w-48 overflow-hidden rounded-xl border border-gray-200 bg-white shadow-lg">
+              {!isEditing ? (
+                <>
                   <button
-                    onClick={() => {
-                      setShowMenu(false);
-                      setIsEditing(true);
-                    }}
-                    className="w-full px-4 py-3 text-left text-sm hover:bg-gray-50"
+                    onClick={() => setShowMenu((prev) => !prev)}
+                    className="rounded-xl p-2 transition hover:bg-gray-100"
                   >
-                    ✏ Edit Project
+                    <MoreVertical size={22} />
                   </button>
 
-                  <button
+                  {showMenu && (
+                    <div className="absolute right-0 mt-2 w-48 overflow-hidden rounded-xl border bg-white shadow-lg">
+                      <button
+                        className="w-full px-4 py-3 text-left hover:bg-gray-100"
+                        onClick={() => {
+                          setShowMenu(false);
+                          setIsEditing(true);
+                        }}
+                      >
+                        ✏ Edit Project
+                      </button>
+
+                      <button
+                        className="w-full px-4 py-3 text-left text-red-600 hover:bg-red-50"
+                        onClick={() => {
+                          setShowMenu(false);
+                          setShowDeleteModal(true);
+                        }}
+                      >
+                        Delete Project
+                      </button>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <div className="flex gap-3">
+                  <Button
+                    className="w-auto px-5 py-3 text-base"
                     onClick={() => {
-                      setShowMenu(false);
-                      setShowDeleteModal(true);
+                      setProjectName(project.name);
+                      setProjectDescription(project.description || "");
+                      setIsEditing(false);
                     }}
-                    className="block w-full px-4 py-3 text-left text-sm text-red-600 hover:bg-red-50"
                   >
-                    Delete Project
-                  </button>
+                    Cancel
+                  </Button>
+
+                  <Button
+                    className="w-auto px-5 py-3 text-base"
+                    disabled={!hasChanges}
+                    onClick={handleUpdateProject}
+                  >
+                    Save
+                  </Button>
                 </div>
               )}
             </div>
-          )}
-        </div>
+          </div>
 
-        <div className="mt-8 flex items-center justify-between">
-          <AvatarGroup members={members} count={4} />
+          {/* BOTTOM */}
+          <div className="mt-10 flex items-center justify-between">
+            <AvatarGroup members={members} count={5} />
 
-          <Button>Manage Members</Button>
+            <Button
+              className="w-auto px-6 py-3 text-base font-semibold"
+              onClick={() => setShowMembersModal(true)}
+            >
+              <div className="flex items-center gap-2">
+                <Users size={18} />
+                Manage Members
+              </div>
+            </Button>
+          </div>
         </div>
       </Card>
-      {/* Delete Project Modal */}
+
+      {/* DELETE MODAL */}
       {showDeleteModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
           <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl">
             <h2 className="text-xl font-semibold">Delete Project</h2>
 
-            <p className="mt-3 text-sm text-gray-600">
-              Are you sure you want to delete
-              <span className="font-semibold"> {project.name}</span>? This
-              action cannot be undone.
+            <p className="mt-4 text-gray-600">
+              Are you sure you want to delete{" "}
+              <span className="font-semibold">{project.name}</span>?
             </p>
 
             <div className="mt-8 flex justify-end gap-3">
               <Button
-                variant="secondary"
+                className="w-auto px-5 py-3 text-base"
                 onClick={() => setShowDeleteModal(false)}
               >
                 Cancel
               </Button>
 
               <Button
+                className="w-auto bg-red-600 px-5 py-3 text-base hover:bg-red-700"
                 onClick={handleDeleteProject}
-                className="bg-red-600 hover:bg-red-700"
               >
-                Delete Project
+                Delete
               </Button>
             </div>
           </div>
         </div>
+      )}
+
+      {/* MEMBERS MODAL */}
+      {showMembersModal && (
+        <ManageMembersModal
+          projectId={projectId}
+          onClose={() => setShowMembersModal(false)}
+        />
       )}
     </>
   );

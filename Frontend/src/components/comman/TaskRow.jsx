@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { MoreHorizontal } from "lucide-react";
-import TASK_STATUS from "../utils/constants";
+import TASK_STATUS from "../../utils/constants.js";
 
 function TaskRow({ task }) {
   return (

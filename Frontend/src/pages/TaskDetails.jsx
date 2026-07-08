@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import {
   Header,
   TaskHero,
-  TaskInfoCard,
+  TaskInfo,
   SubTaskCard,
   AttachmentCard,
   NoteCard,

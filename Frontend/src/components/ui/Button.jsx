@@ -8,6 +8,7 @@ function Button({
   className = "",
   disabled = false,
   showArrow = false,
+  fullWidth = false,
 }) {
   return (
     <button
@@ -15,7 +16,7 @@ function Button({
       onClick={onClick}
       disabled={disabled}
       className={`
-        w-full
+         ${fullWidth ? "w-full" : "w-fit"}
         rounded-2xl
         bg-zinc-900
         px-8

@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Header, StatsCard, Card, ProjectRow } from "../components/index.js";
+import {
+  Header,
+  StatsCard,
+  Card,
+  ProjectRow,
+  Button,
+} from "../components/index.js";
 import { getUserProjects } from "../api/projectApi";
 import { FolderOpen, ListTodo, Clock3, CircleCheck } from "lucide-react";
 import TASK_STATUS from "../utils/constants";
@@ -12,7 +18,7 @@ function Projects() {
   const fetchProjects = async () => {
     try {
       const response = await getUserProjects();
-      setProjects(response.data.data.projects);
+      setProjects(response.data.data);
     } catch (error) {
       console.error(error);
     }
@@ -85,7 +91,7 @@ function Projects() {
     },
   ];
 
-  if (isLoading) {
+  if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
         Loading...
@@ -95,9 +101,17 @@ function Projects() {
 
   if (!projects.length) {
     return (
-      <Card>
-        <p>No projects yet.</p>
-      </Card>
+      <div className="flex h-[70vh] flex-col items-center justify-center">
+        <FolderOpen className="h-16 w-16 text-gray-300" />
+
+        <h2 className="mt-6 text-2xl font-semibold text-gray-800">
+          No projects yet
+        </h2>
+
+        <p className="mt-2 text-gray-500">
+          Create your first project to start organizing your work.
+        </p>
+      </div>
     );
   }
 
@@ -135,7 +149,6 @@ function Projects() {
               <th className="px-6 py-4">Progress</th>
               <th className="px-6 py-4">Status</th>
               <th className="px-6 py-4">Updated</th>
-              <th className="w-12 px-6 py-4"></th>
             </tr>
           </thead>
 

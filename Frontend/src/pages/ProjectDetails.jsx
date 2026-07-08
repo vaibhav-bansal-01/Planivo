@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import {
   Header,
-  Button,
   StatsCard,
   Card,
   TaskCard,
@@ -11,12 +9,10 @@ import {
   ProjectHero,
 } from "../components/index.js";
 import { ListTodo, Clock3, CircleCheck } from "lucide-react";
-import {
-  getProjectById,
-  getProjectTasks,
-  getProjectMembers,
-} from "../api/projectApi";
-import TASK_STATUS from "../constants/taskStatus";
+import { useParams } from "react-router-dom";
+import { getProjectById, getProjectMembers } from "../api/projectApi";
+import { getProjectTasks } from "../api/tasksApi";
+import TASK_STATUS from "../utils/constants.js";
 
 function ProjectDetails() {
   const { projectId } = useParams();
@@ -37,11 +33,9 @@ function ProjectDetails() {
           getProjectMembers(projectId),
         ]);
 
-        const fetchedProject = projectRes.data.data.project;
-
-        setProject(fetchedProject);
-        setTasks(tasksRes.data.data.tasks);
-        setMembers(membersRes.data.data.members);
+        setProject(projectRes.data.data);
+        setTasks(tasksRes.data.data);
+        setMembers(membersRes.data.data);
       } catch (error) {
         console.error(error);
       } finally {
@@ -54,7 +48,7 @@ function ProjectDetails() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
+      <div className="flex h-screen items-center justify-center">
         Loading...
       </div>
     );
@@ -62,7 +56,7 @@ function ProjectDetails() {
 
   if (!project) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
+      <div className="flex h-screen items-center justify-center">
         Project not found.
       </div>
     );
@@ -109,49 +103,59 @@ function ProjectDetails() {
   ];
 
   return (
-    <div className="space-y-8">
-      <Header />
+    <div className="space-y-10 p-8">
+      <Header title="Project Details" subtitle={project.name} />
 
-      {/* Hero */}
-      <ProjectHero
-        project={project}
-        projectId={projectId}
-        members={members}
-        setProject={setProject}
-      />
+      {/* Hero + Stats */}
+      <section className="grid grid-cols-12 gap-6">
+        {/* Left Side - Project Hero */}
+        <div className="col-span-5">
+          <ProjectHero
+            project={project}
+            projectId={projectId}
+            members={members}
+            setProject={setProject}
+          />
+        </div>
 
-      {/* Stats */}
-      <section className="grid grid-cols-3 gap-6">
-        {stats.map((stat) => (
-          <StatsCard key={stat.title} {...stat} />
-        ))}
+        {/* Right Side */}
+        <div className="col-span-7 flex flex-col gap-6">
+          {/* Stats */}
+          <div className="grid grid-cols-3 gap-4">
+            {stats.map((stat) => (
+              <StatsCard key={stat.title} {...stat} />
+            ))}
+          </div>
+
+          {/* Progress */}
+          <Card>
+            <div className="space-y-5">
+              <div className="flex items-center justify-between">
+                <h2 className="text-lg font-semibold">Overall Progress</h2>
+
+                <span className="text-lg font-bold text-blue-600">
+                  {progress}%
+                </span>
+              </div>
+
+              <ProgressBar progress={progress} />
+
+              <div className="flex justify-between text-sm text-gray-500">
+                <span>
+                  Started {new Date(project.createdAt).toLocaleDateString()}
+                </span>
+
+                <span>
+                  Updated {new Date(project.updatedAt).toLocaleDateString()}
+                </span>
+              </div>
+            </div>
+          </Card>
+        </div>
       </section>
 
-      {/* Progress */}
-      <Card>
-        <div className="space-y-5">
-          <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold">Overall Progress</h2>
-
-            <span className="text-lg font-bold text-blue-600">{progress}%</span>
-          </div>
-
-          <ProgressBar progress={progress} />
-
-          <div className="flex justify-between text-sm text-gray-500">
-            <span>
-              Started {new Date(project.createdAt).toLocaleDateString()}
-            </span>
-
-            <span>
-              Updated {new Date(project.updatedAt).toLocaleDateString()}
-            </span>
-          </div>
-        </div>
-      </Card>
-
-      {/* Tasks */}
-      <div className="grid grid-cols-2 gap-6">
+      {/* Bottom Row */}
+      <section className="grid grid-cols-3 gap-6">
         <TaskCard
           title="In Progress"
           tasks={tasks}
@@ -159,10 +163,9 @@ function ProjectDetails() {
         />
 
         <TaskCard title="Completed" tasks={tasks} status={TASK_STATUS.DONE} />
-      </div>
 
-      {/* Notes */}
-      <NoteCard projectId={projectId} />
+        <NoteCard projectId={projectId} />
+      </section>
     </div>
   );
 }

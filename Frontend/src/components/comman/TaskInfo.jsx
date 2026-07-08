@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Card } from "../index.js";
 import { updateTask } from "../../api/tasksApi";
-import TASK_STATUS from "../../constants/taskStatus";
+import TASK_STATUS from "../../utils/constants.js";
 
 function TaskInfoCard({ task, setTask, members = [] }) {
   const [status, setStatus] = useState(task.status);

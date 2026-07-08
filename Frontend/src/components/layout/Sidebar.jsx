@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { SidebarItem, Logo, ProjectListItem, Input } from "../index.js";
 import { getUserProjects, createProject } from "../../api/projectApi";
-import { getUserTasks } from "../../api/tasksApi";
 import {
   LayoutDashboard,
   FolderOpen,
@@ -13,8 +12,11 @@ import {
   Plus,
   ChevronDown,
 } from "lucide-react";
+import { useSelector } from "react-redux";
 
 function Sidebar() {
+  const user = useSelector((state) => state.auth.user);
+
   const [projects, setProjects] = useState([]);
   const [isCreatingProject, setIsCreatingProject] = useState(false);
   const [projectName, setProjectName] = useState("");
@@ -23,7 +25,7 @@ function Sidebar() {
   const fetchProjects = async () => {
     try {
       const response = await getUserProjects();
-      setProjects(response.data.data.projects);
+      setProjects(response.data.data);
     } catch (error) {
       console.error(error);
     }
@@ -41,12 +43,16 @@ function Sidebar() {
         name: projectName,
       });
 
-      setProjects((prev) => [...prev, response.data.data.project]);
+      console.log(response.data);
+
+      const project = response.data.data;
+
+      setProjects((prev) => [...prev, project]);
 
       setProjectName("");
       setIsCreatingProject(false);
 
-      navigate(`/projects/${response.data.data.project._id}`);
+      navigate(`/projects/${project._id}`);
     } catch (error) {
       console.error(error);
     }
@@ -95,7 +101,7 @@ function Sidebar() {
             className="flex items-center gap-2 rounded-xl px-2 py-1 text-sm font-medium text-blue-600 transition hover:bg-blue-50"
             onClick={() => setIsCreatingProject(true)}
           >
-            <Plus size={16} />+ Add Project
+            <Plus size={16} />Add Project
           </button>
         </div>
 

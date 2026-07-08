@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Header,
   ProjectCard,
@@ -8,6 +8,8 @@ import {
 } from "../components";
 import { FolderOpen, ListTodo, Clock3, CircleCheck } from "lucide-react";
 import TASK_STATUS from "../utils/constants";
+import { getUserProjects } from "../api/projectApi";
+import { getUserTasks } from "../api/tasksApi";
 
 function Dashboard() {
   const [tasks, setTasks] = useState([]);
@@ -21,7 +23,7 @@ function Dashboard() {
       ]);
 
       setTasks(tasksResponse.data.data.tasks);
-      setProjects(projectsResponse.data.data.projects);
+      setProjects(projectsResponse.data.data);
     } catch (error) {
       console.error(error);
     }
@@ -86,8 +88,8 @@ function Dashboard() {
           linkText="View all projects"
         />
 
-        <div className="grid grid-cols-2 gap-6">
-          {projects.slice(0, 2).map((project) => (
+        <div className="grid grid-cols-3 gap-6">
+          {projects.slice(0, 3).map((project) => (
             <ProjectCard key={project._id} project={project} />
           ))}
         </div>

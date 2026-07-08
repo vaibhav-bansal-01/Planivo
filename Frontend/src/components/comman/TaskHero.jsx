@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Card, Button } from "../components/index.js";
+import { Card, Button } from "../index.js";
 import { MoreVertical } from "lucide-react";
 import { updateTask, deleteTask } from "../../api/tasksApi";
 

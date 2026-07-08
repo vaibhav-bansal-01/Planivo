@@ -9,8 +9,8 @@ import {
   setError,
   setLoading,
   clearError,
-} from "../features/authSlice.js";
-import { LockClosed, Email } from "lucide-react";
+} from "../features/authSlics.js";
+import { Lock, Mail } from "lucide-react";
 
 function Login() {
   const { isLoading, error } = useSelector((state) => state.auth);
@@ -61,7 +61,7 @@ function Login() {
             placeholder="Enter your email"
             autoFocus
             autoComplete="email"
-            icon={Email}
+            icon={Mail}
             error={errors.email?.message}
             {...register("email", {
               required: "Email is required",
@@ -77,7 +77,7 @@ function Login() {
             placeholder="Enter your password"
             autoComplete="current-password"
             error={errors.password?.message}
-            icon={LockClosed}
+            icon={Lock}
             {...register("password", {
               required: "Password is required",
             })}

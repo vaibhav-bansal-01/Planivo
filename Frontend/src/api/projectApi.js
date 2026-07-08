@@ -1,11 +1,11 @@
 import api from "./axios";
 
 export const getUserProjects = () => {
-  return api.get("/projects");
+  return api.get("/projects/");
 };
 
 export const createProject = (data) => {
-  return api.post("/projects", data);
+  return api.post("/projects/", data);
 };
 
 export const getProjectById = (projectId) => {
@@ -32,10 +32,8 @@ export const getProjectMembers = (projectId) => {
   return api.get(`/projects/${projectId}/members`);
 };
 
-export const getProjectTasks = (projectId) => {
-  return api.get(`/projects/${projectId}/tasks`);
-};
-
-export const createTask = (projectId, data) => {
-  return api.post(`/projects/${projectId}/tasks`, data);
+export const updateMemberRole = (projectId, userId, role) => {
+  return api.put(`/projects/${projectId}/members/${userId}`, {
+    newRole: role,
+  });
 };

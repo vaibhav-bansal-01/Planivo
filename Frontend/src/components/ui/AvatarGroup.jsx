@@ -1,28 +1,59 @@
 import React from "react";
 
 function AvatarGroup({ members = [], count = 4 }) {
-  return (
-    <div className="flex items-center -space-x-3">
-      {members.slice(0, count).map((member) => (
-        <div
-          key={member.user._id}
-          className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border-2 border-white bg-blue-600 text-sm font-semibold text-white"
-        >
-          {member.user.avatar ? (
-            <img
-              src={member.user.avatar}
-              alt={member.user.fullName}
-              className="h-full w-full object-cover"
-            />
-          ) : (
-            member.user.fullName.charAt(0).toUpperCase()
-          )}
-        </div>
-      ))}
+  const visibleMembers = members.slice(0, count);
+  const remaining = members.length - count;
 
-      {members.length > count && (
-        <div className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-white bg-blue-50 text-sm font-semibold text-blue-600">
-          +{members.length - count}
+  return (
+    <div className="flex items-center">
+      {visibleMembers.map((member, index) => {
+        const name =
+          member.user?.fullName ||
+          member.user?.username ||
+          member.fullName ||
+          member.username ||
+          "U";
+
+        const letter = name.charAt(0).toUpperCase();
+
+        return (
+          <div
+            key={member._id || index}
+            className={`
+              -ml-2 first:ml-0
+              flex h-11 w-11 items-center justify-center
+              rounded-full
+              border-2 border-white
+              bg-linear-to-br
+              from-blue-500
+              to-indigo-600
+              text-sm
+              font-semibold
+              text-white
+              shadow-md
+            `}
+            title={name}
+          >
+            {letter}
+          </div>
+        );
+      })}
+
+      {remaining > 0 && (
+        <div
+          className="
+            -ml-2
+            flex h-11 w-11 items-center justify-center
+            rounded-full
+            border-2 border-white
+            bg-blue-50
+            text-sm
+            font-semibold
+            text-blue-600
+            shadow-md
+          "
+        >
+          +{remaining}
         </div>
       )}
     </div>

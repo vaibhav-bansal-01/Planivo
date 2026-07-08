@@ -50,6 +50,7 @@ const getProjects = asyncHandler(async (req, res) => {
         members: "$project.members",
         createdBy: "$project.createdBy",
         createdAt: "$project.createdAt",
+        updatedAt: "$project.updatedAt",
         role: 1,
       },
     },
@@ -64,6 +65,8 @@ const getProjectById = asyncHandler(async (req, res) => {
   const { projectId } = req.params;
 
   const project = await Project.findById(projectId);
+
+  console.log("Found project:", project);
 
   if (!project) {
     throw new ApiError(404, "Project not found");
@@ -163,10 +166,14 @@ const addMembersToProject = asyncHandler(async (req, res) => {
       upsert: true, //create new if not exist any
     },
   );
+  const member = await ProjectMember.findById(projectMember._id).populate(
+    "user",
+    "fullName username email avatar",
+  );
 
   return res
     .status(201)
-    .json(new ApiResponse(201, {}, "Member added to project successfully"));
+    .json(new ApiResponse(201, member, "Member added to project successfully"));
 });
 
 const getProjectMembers = asyncHandler(async (req, res) => {
@@ -277,16 +284,16 @@ const updateMembersRole = asyncHandler(async (req, res) => {
 const deleteMembers = asyncHandler(async (req, res) => {
   const { projectId, userId } = req.params;
 
-  const project = await Project.findById(projectId)
+  const project = await Project.findById(projectId);
 
-  if(!project){
-    throw new ApiError(404, "Project not found")
+  if (!project) {
+    throw new ApiError(404, "Project not found");
   }
 
-  const user = await User.findById(userId)
+  const user = await User.findById(userId);
 
-  if(!user){
-    throw new ApiError(404, "User not found")
+  if (!user) {
+    throw new ApiError(404, "User not found");
   }
 
   const projectMember = await ProjectMember.findOne({
@@ -302,13 +309,7 @@ const deleteMembers = asyncHandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(
-      new ApiResponse(
-        200,
-        {},
-        "Projects member deleted successfully",
-      ),
-    );
+    .json(new ApiResponse(200, {}, "Projects member deleted successfully"));
 });
 
 export {

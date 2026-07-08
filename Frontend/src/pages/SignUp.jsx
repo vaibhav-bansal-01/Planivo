@@ -4,8 +4,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { registerUser } from "../api/authApi.js";
-import { setError, setLoading, clearError } from "../features/authSlice.js";
-import { LockClosed, Email, User } from "lucide-react";
+import { setError, setLoading, clearError } from "../features/authSlics.js";
+import { Lock, Mail, User } from "lucide-react";
 
 function SignUp() {
   const [successMessage, setSuccessMessage] = useState("");
@@ -28,6 +28,7 @@ function SignUp() {
 
     try {
       const response = await registerUser(data);
+      console.log(response);
       dispatch(setLoading(false));
       setSuccessMessage(response.data.message);
       setTimeout(() => {
@@ -85,7 +86,7 @@ function SignUp() {
             placeholder="Enter your email"
             autoComplete="email"
             disabled={isLoading || !!successMessage}
-            icon={Email}
+            icon={Mail}
             error={errors.email?.message}
             {...register("email", {
               required: "Email is required",
@@ -102,7 +103,7 @@ function SignUp() {
             disabled={isLoading || !!successMessage}
             autoComplete="new-password"
             error={errors.password?.message}
-            icon={LockClosed}
+            icon={Lock}
             {...register("password", {
               required: "Password is required",
               minLength: {
@@ -117,7 +118,7 @@ function SignUp() {
             disabled={isLoading || !!successMessage}
             placeholder="Confirm your new password"
             error={errors.confirmPassword?.message}
-            icon={LockClosed}
+            icon={Lock}
             {...register("confirmPassword", {
               required: "Please confirm your password",
               validate: (value) =>

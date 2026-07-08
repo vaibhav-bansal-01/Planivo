@@ -5,7 +5,7 @@ export const getUserTasks = () => {
 };
 
 export const getProjectTasks = (projectId) => {
-  return api.get("/tasks");
+  return api.get(`/tasks/${projectId}`);
 };
 
 export const createTask = (projectId, data) => {

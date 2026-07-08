@@ -1,6 +1,6 @@
 import React from "react";
 
-function Card({ children, className = "", padding = "p-8" }) {
+function Card({ children, className = "", padding = "p-8", onClick }) {
   return (
     <div
       className={`
@@ -12,6 +12,7 @@ function Card({ children, className = "", padding = "p-8" }) {
         ${padding}
         ${className}
       `}
+      onClick={onClick}
     >
       {children}
     </div>

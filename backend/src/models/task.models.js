@@ -4,7 +4,7 @@ import {
   TaskStatusEnum,
   AvailableTasksPriority,
   TasksPriorityEnum,
-} from "../utils/constants";
+} from "../utils/constants.js";
 
 const taskSchema = new Schema(
   {

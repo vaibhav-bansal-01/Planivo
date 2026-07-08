@@ -3,7 +3,7 @@ import { Button, Input, Card, Logo } from "../components";
 import { useForm } from "react-hook-form";
 import { resetForgotPassword } from "../api/authApi";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { LockClosed } from "lucide-react";
+import { Lock } from "lucide-react";
 
 function ResetPassword() {
   const [isLoading, setIsLoading] = useState(false);
@@ -61,7 +61,7 @@ function ResetPassword() {
             disabled={isLoading || !!successMessage}
             placeholder="Enter your new password"
             error={errors.password?.message}
-            icon={LockClosed}
+            icon={Lock}
             {...register("password", {
               required: "Password is required",
               minLength: {
@@ -77,7 +77,7 @@ function ResetPassword() {
             disabled={isLoading || !!successMessage}
             placeholder="Confirm your new password"
             error={errors.confirmPassword?.message}
-            icon={LockClosed}
+            icon={Lock}
             {...register("confirmPassword", {
               required: "Please confirm your password",
               validate: (value) =>

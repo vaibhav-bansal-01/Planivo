@@ -23,6 +23,7 @@ import {
   validateProjectPermission,
 } from "../middlewares/auth.middleware.js";
 import { AvailableRoles, UserRolesEnum } from "../utils/constants.js";
+import { upload } from "../middlewares/multer.middleware.js";
 
 const router = Router();
 router.use(verifyJWT);

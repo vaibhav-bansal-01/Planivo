@@ -9,11 +9,7 @@ import mongoose, { Aggregate } from "mongoose";
 import { AvailableTaskStatus } from "../utils/constants.js";
 import { AvailableTasksPriority } from "../utils/constants.js";
 
-import mongoose from "mongoose";
-import { asyncHandler } from "../utils/asyncHandler.js";
-import { ApiResponse } from "../utils/ApiResponse.js";
-import { ProjectMember } from "../models/projectMember.model.js";
-import { Task } from "../models/task.model.js";
+import { ProjectMember } from "../models/projectmember.models.js";
 
 const getUserTasks = asyncHandler(async (req, res) => {
   // Find all projects the user belongs to

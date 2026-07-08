@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { MoreHorizontal } from "lucide-react";
-import TASK_STATUS from "../utils/constants";
+import TASK_STATUS from "../../utils/constants.js";
 
 function ProjectRow({ project, progress }) {
   const totalTasks = project.tasks?.length || 0;
@@ -93,13 +93,6 @@ function ProjectRow({ project, progress }) {
       {/* Updated */}
       <td className="px-6 py-5 text-sm text-gray-500">
         {new Date(project.updatedAt).toLocaleDateString()}
-      </td>
-
-      {/* Actions */}
-      <td className="px-6 py-5 text-right">
-        <button className="rounded-lg p-2 transition hover:bg-gray-100">
-          <MoreHorizontal size={18} />
-        </button>
       </td>
     </tr>
   );
