@@ -3,10 +3,12 @@ import { getUserTasks } from "../api/tasksApi";
 import { Button, Card, Header, StatsCard, TaskRow } from "../components";
 import TASK_STATUS from "../utils/constants";
 import { ListTodo, Clock3, CircleCheck, Clock } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 function Tasks() {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   const fetchTasks = async () => {
     setLoading(true);
@@ -86,19 +88,28 @@ function Tasks() {
   if (!tasks || tasks.length === 0) {
     return (
       <div className="flex min-h-screen items-center justify-center">
-        <div className="flex flex-col items-center gap-6 text-center">
-          <h1 className="text-3xl font-bold text-gray-900">No tasks found</h1>
+        <div className="flex flex-col items-center gap-3 text-center">
+          <h1 className="text-4xl font-bold text-gray-900">No tasks found</h1>
 
-          <p className="max-w-md text-gray-600">
-            You don't have any assigned tasks yet.
+          <p className="max-w-md text-gray-600 text-xl">
+            You don't have any assigned tasks yet. Create your first task to get
+            started.
           </p>
+
+          <Button
+            type="button"
+            className="w-auto px-6 py-3 text-xl mt-6"
+            onClick={() => navigate(`/tasks/new`)}
+          >
+            + Create Task
+          </Button>
         </div>
       </div>
     );
   }
 
   return (
-    <>
+    <div className="space-y-10 p-8">
       <Header
         title="Tasks"
         subtitle="View and manage all your tasks across projects"
@@ -121,7 +132,6 @@ function Tasks() {
               <th className="px-6 py-4">Priority</th>
               <th className="px-6 py-4">Status</th>
               <th className="px-6 py-4">Due Date</th>
-              <th className="w-12 px-6 py-4"></th>
             </tr>
           </thead>
 
@@ -131,8 +141,15 @@ function Tasks() {
             ))}
           </tbody>
         </table>
+
+        {/* Footer */}
+        <div className="flex justify-end border-t border-gray-200 bg-white px-6 py-4">
+          <Button className="px-6 py-3" onClick={() => navigate("/tasks/new")}>
+            + Create Task
+          </Button>
+        </div>
       </Card>
-    </>
+    </div>
   );
 }
 

@@ -52,7 +52,7 @@ function Dashboard() {
     },
     {
       title: "In Progress",
-      value: tasks.filter((task) => task.status === TaskStatus.IN_PROGRESS)
+      value: tasks.filter((task) => task.status === TASK_STATUS.IN_PROGRESS)
         .length,
       description: "Tasks in progress",
       icon: Clock3,
@@ -61,7 +61,7 @@ function Dashboard() {
     },
     {
       title: "Completed",
-      value: tasks.filter((task) => task.status === TaskStatus.DONE).length,
+      value: tasks.filter((task) => task.status === TASK_STATUS.DONE).length,
       description: "Completed tasks",
       icon: CircleCheck,
       iconBg: "bg-green-100",

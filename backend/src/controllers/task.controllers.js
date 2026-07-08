@@ -98,6 +98,8 @@ const getTaskById = asyncHandler(async (req, res) => {
         _id: new mongoose.Types.ObjectId(taskId),
       },
     },
+
+    // Assigned To
     {
       $lookup: {
         from: "users",
@@ -109,16 +111,57 @@ const getTaskById = asyncHandler(async (req, res) => {
             $project: {
               _id: 1,
               username: 1,
-              fullname: 1,
+              fullName: 1,
               avatar: 1,
             },
           },
         ],
       },
     },
+
+    // Assigned By
     {
       $lookup: {
-        from: "subTask",
+        from: "users",
+        localField: "assignedBy",
+        foreignField: "_id",
+        as: "assignedBy",
+        pipeline: [
+          {
+            $project: {
+              _id: 1,
+              username: 1,
+              fullName: 1,
+              avatar: 1,
+            },
+          },
+        ],
+      },
+    },
+
+    // Project
+    {
+      $lookup: {
+        from: "projects",
+        localField: "project",
+        foreignField: "_id",
+        as: "project",
+        pipeline: [
+          {
+            $project: {
+              _id: 1,
+              name: 1,
+              description: 1,
+            },
+          },
+        ],
+      },
+    },
+
+    // Subtasks
+    {
+      $lookup: {
+        from: "subtasks",
         localField: "_id",
         foreignField: "task",
         as: "subtasks",
@@ -134,7 +177,7 @@ const getTaskById = asyncHandler(async (req, res) => {
                   $project: {
                     _id: 1,
                     username: 1,
-                    fullname: 1,
+                    fullName: 1,
                     avatar: 1,
                   },
                 },
@@ -151,22 +194,30 @@ const getTaskById = asyncHandler(async (req, res) => {
         ],
       },
     },
+
+    // Convert arrays into objects
     {
       $addFields: {
         assignedTo: {
           $arrayElemAt: ["$assignedTo", 0],
         },
+        assignedBy: {
+          $arrayElemAt: ["$assignedBy", 0],
+        },
+        project: {
+          $arrayElemAt: ["$project", 0],
+        },
       },
     },
   ]);
 
-  if (!task || task.length === 0) {
+  if (!task.length) {
     throw new ApiError(404, "Task not found");
   }
 
   return res
     .status(200)
-    .json(new ApiResponse(200, task[0], "Tasks fetched successfully"));
+    .json(new ApiResponse(200, task[0], "Task fetched successfully"));
 });
 
 const updateTask = asyncHandler(async (req, res) => {

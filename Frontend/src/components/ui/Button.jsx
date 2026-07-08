@@ -16,29 +16,29 @@ function Button({
       onClick={onClick}
       disabled={disabled}
       className={`
-         ${fullWidth ? "w-full" : "w-fit"}
+        ${fullWidth ? "w-full" : "w-fit"}
+        inline-flex items-center justify-center gap-2
         rounded-2xl
         bg-zinc-900
-        px-8
-        py-5
-        text-2xl
-        font-bold
+        px-6
+        py-3
+        text-base
+        font-semibold
         text-white
         shadow-lg
         transition-all
-        duration-300
+        duration-200
         hover:bg-black
         hover:shadow-xl
+        hover:scale-110
         disabled:cursor-not-allowed
         disabled:opacity-50
         ${className}
       `}
     >
-      <div className="flex items-center justify-center gap-3">
-        {children}
+      {children}
 
-        {showArrow && <ArrowRight size={34} strokeWidth={2.5} />}
-      </div>
+      {showArrow && <ArrowRight size={18} />}
     </button>
   );
 }

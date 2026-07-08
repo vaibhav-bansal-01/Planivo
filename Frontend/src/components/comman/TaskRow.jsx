@@ -7,8 +7,11 @@ function TaskRow({ task }) {
   return (
     <tr className="border-b border-gray-100 transition hover:bg-gray-50">
       {/* Task */}
-      <td className="px-6 py-5">
-        <Link to={`/tasks/${task._id}`} className="flex items-center gap-4">
+      <td className="px-6 py-5 align-middle">
+        <Link
+          to={`/projects/${task.project._id}/tasks/${task._id}`}
+          className="flex items-center gap-4"
+        >
           <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-100 text-lg font-semibold text-blue-600">
             {task.title?.charAt(0).toUpperCase()}
           </div>
@@ -26,12 +29,12 @@ function TaskRow({ task }) {
       </td>
 
       {/* Project */}
-      <td className="max-w-xs px-6 py-5 text-sm text-gray-600">
-        <p className="line-clamp-2">{task.project.title}</p>
+      <td className="max-w-xs px-6 py-5 text-sm text-gray-600 align-middle">
+        <p className="line-clamp-2">{task.project.name}</p>
       </td>
 
       {/* Assignee */}
-      <td className="px-6 py-5">
+      <td className="px-6 py-5 align-middle">
         <div className="flex items-center gap-3">
           {task.assignedTo?.avatar ? (
             <img
@@ -46,15 +49,15 @@ function TaskRow({ task }) {
           )}
 
           <span className="text-sm font-medium text-gray-800">
-            {task.assignedTo?.fullName}
+            {task.assignedTo?.username || task.assignedTo?.fullName}
           </span>
         </div>
       </td>
 
       {/* Priority */}
-      <td className="px-6 py-5 text-center">
+      <td className="px-6 py-5 align-middle text-center">
         <span
-          className={`rounded-full px-3 py-1 text-xs font-semibold ${
+          className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold capitalize ${
             task.priority === "high"
               ? "bg-red-100 text-red-700"
               : task.priority === "medium"
@@ -67,9 +70,9 @@ function TaskRow({ task }) {
       </td>
 
       {/* Status */}
-      <td className="px-6 py-5">
+      <td className="px-6 py-5 align-middle">
         <span
-          className={`rounded-full px-3 py-1 text-xs font-semibold ${
+          className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold capitalize ${
             task.status === TASK_STATUS.DONE
               ? "bg-green-100 text-green-700"
               : task.status === TASK_STATUS.IN_PROGRESS
@@ -77,20 +80,13 @@ function TaskRow({ task }) {
                 : "bg-gray-100 text-gray-700"
           }`}
         >
-          {task.status}
+          {task.status.replace("_", " ")}
         </span>
       </td>
 
       {/* Due Date */}
-      <td className="px-6 py-5">
+      <td className="px-6 py-5 align-middle">
         {task.dueDate ? new Date(task.dueDate).toLocaleDateString() : "-"}
-      </td>
-
-      {/* Actions */}
-      <td className="px-6 py-5 text-right">
-        <button className="rounded-lg p-2 transition hover:bg-gray-100">
-          <MoreHorizontal size={18} />
-        </button>
       </td>
     </tr>
   );

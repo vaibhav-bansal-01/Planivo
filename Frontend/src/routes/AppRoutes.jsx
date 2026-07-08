@@ -13,6 +13,7 @@ import {
   ForgotPassword,
   ResetPassword,
   VerifyEmail,
+  CreateTask,
 } from "../pages/index.js";
 
 import ProtectedRoute from "./ProtectedRoutes";
@@ -28,7 +29,9 @@ function AppRoutes() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password/:resetToken" element={<ResetPassword />} />
-        <Route path="/verify-email/:verificationToken" element={<VerifyEmail />}
+        <Route
+          path="/verify-email/:verificationToken"
+          element={<VerifyEmail />}
         />
       </Route>
 
@@ -43,7 +46,16 @@ function AppRoutes() {
           <Route path="projects/:projectId" element={<ProjectDetails />} />
 
           <Route path="tasks" element={<Tasks />} />
-          <Route path="tasks/:taskId" element={<TaskDetails />} />
+          <Route path="tasks/new" element={<CreateTask />} />
+
+          <Route
+            path="projects/:projectId/tasks/:taskId/edit"
+            element={<CreateTask />}
+          />
+          <Route
+            path="projects/:projectId/tasks/:taskId"
+            element={<TaskDetails />}
+          />
 
           <Route path="calendar" element={<Calendar />} />
         </Route>

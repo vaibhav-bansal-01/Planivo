@@ -22,9 +22,9 @@ function TaskDetails() {
     try {
       setLoading(true);
 
-      const response = await getTaskById(taskId);
+      const response = await getTaskById(projectId, taskId);
 
-      setTask(response.data.data.task);
+      setTask(response.data.data);
     } catch (error) {
       console.error(error);
     } finally {
@@ -53,8 +53,8 @@ function TaskDetails() {
   }
 
   return (
-    <div className="space-y-8">
-      <Header />
+    <div className="space-y-10 p-8">
+      <Header title="Task Details" subtitle={task.title} />
 
       <div className="grid grid-cols-3 gap-6">
         {/* Left Column */}
@@ -68,7 +68,7 @@ function TaskDetails() {
 
         {/* Right Column */}
         <div className="space-y-6">
-          <TaskInfoCard task={task} />
+          <TaskInfo task={task} projectId={projectId} />
 
           <NoteCard projectId={projectId} />
         </div>

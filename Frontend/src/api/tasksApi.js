@@ -9,31 +9,31 @@ export const getProjectTasks = (projectId) => {
 };
 
 export const createTask = (projectId, data) => {
-  return api.post(`/projects/${projectId}/tasks`, data);
+  return api.post(`/tasks/${projectId}`, data);
 };
 
-export const getTaskById = (taskId) => {
-  return api.get(`/tasks/${taskId}`);
+export const getTaskById = (projectId, taskId) => {
+  return api.get(`/tasks/${projectId}/t/${taskId}`);
 };
 
-export const updateTask = (taskId, data) => {
-  return api.put(`/tasks/${taskId}`, data);
+export const updateTask = (projectId, taskId, data) => {
+  return api.put(`/tasks/${projectId}/t/${taskId}`, data);
 };
 
-export const deleteTask = (taskId) => {
-  return api.delete(`/tasks/${taskId}`);
+export const deleteTask = (projectId, taskId) => {
+  return api.delete(`/tasks/${projectId}/t/${taskId}`);
 };
 
-export const createSubTask = (taskId, data) => {
-  return api.post(`/tasks/${taskId}/subtasks`, data);
+export const createSubTask = (projectId, taskId, data) => {
+  return api.post(`/tasks/${projectId}/t/${taskId}/subtasks`, data);
 };
 
-export const updateSubTask = (subtaskId, data) => {
-  return api.put(`/subtasks/${subtaskId}`, data);
+export const updateSubTask = (projectId, subtaskId, data) => {
+  return api.put(`/tasks/${projectId}/st/${subtaskId}`, data);
 };
 
-export const deleteSubTask = (subtaskId) => {
-  return api.delete(`/subtasks/${subtaskId}`);
+export const deleteSubTask = (projectId, subtaskId) => {
+  return api.delete(`/tasks/${projectId}/st/${subtaskId}`);
 };
 
 export const getSubTasksByTaskId = (taskId) => {

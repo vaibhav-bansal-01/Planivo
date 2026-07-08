@@ -10,6 +10,7 @@ import Calendar from "./Calendar";
 import ForgotPassword from "./ForgotPassword";
 import ResetPassword from "./ResetPassword";
 import VerifyEmail from "./VerifyEmail";
+import CreateTask from "./CreateTask";
 
 export {
   Dashboard,
@@ -24,4 +25,5 @@ export {
   ForgotPassword,
   ResetPassword,
   VerifyEmail,
+  CreateTask,
 };
