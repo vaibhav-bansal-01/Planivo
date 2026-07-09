@@ -28,7 +28,7 @@ function ProjectCard({ project }) {
       </div>
 
       {/* Description */}
-      <p className="mt-5 min-h-[48px] text-sm leading-6 text-gray-600">
+      <p className="mt-5 min-h-\[48px\] text-sm leading-6 text-gray-600">
         {project.description || "No description provided."}
       </p>
 
