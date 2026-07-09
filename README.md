@@ -1,8 +1,9 @@
+<img width="1918" height="968" alt="Screenshot 2026-07-10 001327" src="https://github.com/user-attachments/assets/ffac2d1c-1479-4741-aa7b-064e28a4fb69" />
 # 🚀 Planivo
 
 **Plan smarter. Collaborate better. Deliver faster.**
 
-Planivo is a full-stack project management application designed to help teams organize projects, manage tasks, collaborate efficiently, and track progress in real time. It provides secure authentication, role-based access control, project collaboration, task tracking, notes, and calendar integration through an intuitive and responsive interface.
+Planivo is a full-stack project management application designed to help teams organize projects, manage tasks, collaborate efficiently, and track progress in real time. It provides secure authentication, role-based access control, project collaboration, task tracking, and notes through an intuitive and responsive interface.
 
 ---
 
@@ -95,14 +96,6 @@ Both backend authorization and frontend permission-aware rendering are implement
 * Remove members
 * Change member roles
 * Prevent unauthorized role modifications
-
----
-
-### 📅 Calendar
-
-* Calendar view
-* Track upcoming deadlines
-* Organize work visually
 
 ---
 
@@ -280,16 +273,33 @@ Add screenshots for:
 
 * Login <img width="1918" height="971" alt="Screenshot 2026-07-10 001310" src="https://github.com/user-attachments/assets/42a91dfe-06fe-466f-b82a-1f326c4373b8" />
 
-* Register
-* Dashboard
-* Projects
-* Project Details
-* Task Details
-* Calendar
-* Notes
-* Member Management
-* Role-Based UI (Admin vs Member)
-* Profile
+* Register <img width="1918" height="968" alt="Screenshot 2026-07-10 001327" src="https://github.com/user-attachments/assets/c2159879-67d2-48fa-ab6d-697d7996961d" />
+
+* Dashboard <img width="1893" height="961" alt="Screenshot 2026-07-10 003153" src="https://github.com/user-attachments/assets/a6648177-1784-4f48-9e0a-9a12189e79a7" />
+
+* Projects <img width="1905" height="950" alt="Screenshot 2026-07-10 003201" src="https://github.com/user-attachments/assets/c97f136d-c3bd-4461-8215-b8fbbe6197d7" />
+
+* Project Details <img width="1891" height="963" alt="Screenshot 2026-07-10 003210" src="https://github.com/user-attachments/assets/3d4858c5-66a5-4652-8b02-50811b0753de" />
+
+* Tasks <img width="1918" height="962" alt="Screenshot 2026-07-10 003221" src="https://github.com/user-attachments/assets/b4a70b86-b10b-4e15-a5cb-13e3614d494b" />
+
+* Task Details <img width="1892" height="946" alt="Screenshot 2026-07-10 003231" src="https://github.com/user-attachments/assets/3ce7619c-d0dd-40b2-89a0-1571afce2053" />
+
+* Member Management <img width="1002" height="896" alt="Screenshot 2026-07-10 002106" src="https://github.com/user-attachments/assets/33af93ca-e969-45df-8191-915e9b5d48ad" />
+
+* Role-Based UI (Member) <img width="1911" height="963" alt="Screenshot 2026-07-10 004233" src="https://github.com/user-attachments/assets/8d22e6cb-9744-418c-88d2-745e38ab9899" />
+
+* Profile <img width="1917" height="961" alt="Screenshot 2026-07-10 001906" src="https://github.com/user-attachments/assets/57c9d8e6-33da-4144-bf26-9f5e054e457f" />
+
+* Verification Mail <img width="1831" height="773" alt="Screenshot 2026-07-10 001506" src="https://github.com/user-attachments/assets/460983bc-b7ea-4683-a55d-3a5ada3b18ef" />
+
+* Request Password Change Mail <img width="1917" height="970" alt="Screenshot 2026-07-10 001550" src="https://github.com/user-attachments/assets/058b7f7b-5815-4060-b477-8d593afaea6d" />
+
+* Email Verification Link <img width="1918" height="962" alt="Screenshot 2026-07-10 001521" src="https://github.com/user-attachments/assets/5455b359-e19d-4980-ae28-1e486769dc06" />
+
+* Reset Password Link <img width="1918" height="962" alt="Screenshot 2026-07-10 001633" src="https://github.com/user-attachments/assets/4456f206-31cc-4392-bbc7-e2357b74de60" />
+
+
 
 ---
 
