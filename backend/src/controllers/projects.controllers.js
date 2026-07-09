@@ -66,8 +66,6 @@ const getProjectById = asyncHandler(async (req, res) => {
 
   const project = await Project.findById(projectId);
 
-  console.log("Found project:", project);
-
   if (!project) {
     throw new ApiError(404, "Project not found");
   }

@@ -28,7 +28,7 @@ function TaskCard({ tasks = [], status, title }) {
 
   if (taskArray.length === 0) {
     return (
-      <Card className="flex h-80 flex-col">
+      <Card className="flex flex-col">
         <div className="mb-6 flex items-center justify-between">
           <h2 className="text-2xl font-bold">{title}</h2>
 

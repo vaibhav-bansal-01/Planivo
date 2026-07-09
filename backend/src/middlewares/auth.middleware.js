@@ -14,8 +14,6 @@ export const verifyJWT = asyncHandler(async (req, res, next) => {
     throw new ApiError(401, "Unauthorized request");
   }
 
-  console.log("Logged in user:", req.user);
-
   try {
     const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
 
@@ -43,15 +41,10 @@ export const validateProjectPermission = (roles = []) => {
       throw new ApiError(400, "Project id is missing");
     }
 
-    console.log("projectId:", projectId);
-    console.log("req.user._id:", req.user._id);
-
     const project = await ProjectMember.findOne({
       project: new mongoose.Types.ObjectId(projectId),
       user: new mongoose.Types.ObjectId(req.user._id),
     });
-
-    console.log("Membership found:", project);
 
     if (!project) {
       throw new ApiError(400, "Project not found");

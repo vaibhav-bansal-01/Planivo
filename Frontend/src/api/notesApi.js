@@ -1,21 +1,21 @@
-import axios from "axios";
+import api from "./axios";
 
 export const getProjectNotes = async (projectId) => {
-  return axios.get(`/notes/${projectId}`);
+  return api.get(`/notes/${projectId}`);
 };
 
 export const createNote = async (projectId, data) => {
-  return axios.post(`/notes/${projectId}`, data);
+  return api.post(`/notes/${projectId}`, data);
 };
 
-export const getNoteById = async (noteId) => {
-  return axios.get(`/notes/${noteId}`);
+export const getNoteById = async (projectId, noteId) => {
+  return api.get(`/notes/${projectId}/n/${noteId}`);
 };
 
-export const updateNote = async (noteId, data) => {
-  return axios.put(`/notes/${noteId}`, data);
+export const updateNote = async (projectId, noteId, data) => {
+  return api.put(`/notes/${projectId}/n/${noteId}`, data);
 };
 
-export const deleteNote = async (noteId) => {
-  return axios.delete(`/notes/${noteId}`);
+export const deleteNote = async (projectId, noteId) => {
+  return api.delete(`/notes/${projectId}/n/${noteId}`);
 };

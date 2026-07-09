@@ -1,39 +1,125 @@
-import React from "react";
-import { Card, SectionHeader, NoteItem } from "../index.js";
-import { StickyNote } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { StickyNote, Plus } from "lucide-react";
+import { Card, Button, Input, NoteItem } from "../index.js";
+import { getProjectNotes, createNote } from "../../api/notesApi.js";
 
-function NoteCard({ notes = [] }) {
+function NoteCard({ projectId }) {
+  const [notes, setNotes] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [showForm, setShowForm] = useState(false);
+  const [content, setContent] = useState("");
+
+  const fetchNotes = async () => {
+    try {
+      setLoading(true);
+
+      const response = await getProjectNotes(projectId);
+
+      setNotes(response.data.data || []);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (projectId) {
+      fetchNotes();
+    }
+  }, [projectId]);
+
+  const handleCreate = async () => {
+
+    try {
+      await createNote(projectId, {
+        content,
+      });
+
+      setContent("");
+      setShowForm(false);
+
+      fetchNotes();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
-    <Card className="min-h-\[340px\] p-6 flex flex-col">
-      <SectionHeader title="Notes" link="/notes" linkText="View all notes" />
+    <Card className="p-6">
+      {/* Header */}
 
-      {notes.length === 0 ? (
-        <div className="flex flex-1 flex-col items-center justify-center text-center">
+      <div className="flex items-center justify-between">
+        <h2 className="text-xl font-semibold text-gray-900">Notes</h2>
+
+        <Button
+          className="px-5 py-2 text-base"
+          onClick={() => setShowForm((prev) => !prev)}
+        >
+          <Plus size={18} />
+          Add Note
+        </Button>
+      </div>
+
+      {/* Add Form */}
+
+      {showForm && (
+        <div className="mt-6 rounded-2xl border border-gray-200 p-5">
+          <div className="space-y-4">
+            <textarea
+              rows={5}
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              placeholder="Write your note..."
+              className="w-full rounded-xl border border-gray-300 p-4 outline-none focus:border-blue-500"
+            />
+
+            <div className="flex justify-end gap-3">
+              <Button
+                className="bg-gray-200 text-black hover:bg-gray-300"
+                onClick={() => {
+                  setShowForm(false);
+                  setTitle("");
+                  setContent("");
+                }}
+              >
+                Cancel
+              </Button>
+
+              <Button onClick={handleCreate}>Save Note</Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Loading */}
+
+      {loading ? (
+        <div className="py-10 text-center text-gray-500">Loading notes...</div>
+      ) : (notes.length === 0 && !showForm) ? (
+        <div className="flex flex-col items-center justify-center py-12 text-center">
           <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-gray-100">
             <StickyNote className="h-8 w-8 text-orange-400" />
           </div>
 
-          <h3 className="text-2xl font-semibold text-gray-900">No notes yet</h3>
+          <h3 className="text-xl font-semibold text-gray-900">No notes yet</h3>
 
           <p className="mt-2 max-w-xs text-sm text-gray-500">
-            Create your first note to keep important project information in one
-            place.
+            Keep important discussions, meeting minutes and project updates
+            here.
           </p>
         </div>
       ) : (
-        <>
-          <div className="mt-6 flex-1 space-y-4">
-            {notes.slice(0, 4).map((note) => (
-              <NoteItem key={note._id} note={note} />
-            ))}
-          </div>
-
-          {notes.length > 4 && (
-            <button className="mt-6 text-sm font-semibold text-blue-600 hover:text-blue-700">
-              + {notes.length - 4} more notes
-            </button>
-          )}
-        </>
+        <div className="mt-6 space-y-4">
+          {notes.map((note) => (
+            <NoteItem
+              key={note._id}
+              note={note}
+              projectId={projectId}
+              refresh={fetchNotes}
+            />
+          ))}
+        </div>
       )}
     </Card>
   );
