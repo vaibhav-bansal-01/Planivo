@@ -303,6 +303,9 @@ const updateSubTask = asyncHandler(async (req, res) => {
   const { subtaskId } = req.params;
   const { title, isCompleted } = req.body;
 
+  console.log(req.params);
+  console.log("✅ updateSubTask reached");
+
   const updateData = {};
 
   if (title) updateData.title = title;

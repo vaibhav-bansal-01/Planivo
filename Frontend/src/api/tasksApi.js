@@ -36,24 +36,16 @@ export const deleteSubTask = (projectId, subtaskId) => {
   return api.delete(`/tasks/${projectId}/st/${subtaskId}`);
 };
 
-export const getSubTasksByTaskId = (taskId) => {
-  return api.get(`/subtasks/${taskId}`);
+export const getSubTasksByTaskId = (projectId, taskId) => {
+  return api.get(`/tasks/${projectId}/t/${taskId}/subtasks`);
 };
 
 export const addAttachments = (projectId, taskId, formData) => {
-  return api.post(
-    `/projects/${projectId}/tasks/${taskId}/attachments`,
-    formData,
-    {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    },
-  );
+  return api.post(`/tasks/${projectId}/t/${taskId}/attachments`, formData);
 };
 
 export const removeAttachment = (projectId, taskId, attachmentId) => {
   return api.delete(
-    `/projects/${projectId}/tasks/${taskId}/attachments/${attachmentId}`,
+    `/tasks/${projectId}/t/${taskId}/attachments/${attachmentId}`,
   );
 };

@@ -61,7 +61,7 @@ function TaskDetails() {
         <div className="col-span-2 space-y-6">
           <TaskHero task={task} />
 
-          <SubTaskCard taskId={taskId} projectId={projectId} />
+          <SubTaskCard  projectId={projectId} taskId={taskId} />  
 
           <AttachmentCard task={task} setTask={setTask} />
         </div>

@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useRef } from "react";
 import { Card, Button } from "../index.js";
-import { Paperclip, Trash2, Upload } from "lucide-react";
+import { Paperclip, Trash2, Upload, ImageIcon, FileText } from "lucide-react";
 import { addAttachments, removeAttachment } from "../../api/tasksApi";
 
 function AttachmentCard({ task, setTask }) {
+  const fileInputRef = useRef(null);
+
   const handleUpload = async (e) => {
     try {
       const files = Array.from(e.target.files);
@@ -33,7 +35,7 @@ function AttachmentCard({ task, setTask }) {
   const handleDelete = async (attachmentId) => {
     try {
       const response = await removeAttachment(
-        task.project._id,
+        task.project,
         task._id,
         attachmentId,
       );
@@ -63,19 +65,20 @@ function AttachmentCard({ task, setTask }) {
       <div className="mb-6 flex items-center justify-between">
         <h2 className="text-lg font-semibold text-gray-900">Attachments</h2>
 
-        <label className="cursor-pointer">
+        <>
           <input
+            ref={fileInputRef}
             type="file"
             multiple
             className="hidden"
             onChange={handleUpload}
           />
 
-          <Button as="span">
+          <Button type="button" onClick={() => fileInputRef.current?.click()}>
             <Upload size={16} />
             Upload
           </Button>
-        </label>
+        </>
       </div>
 
       {task.attachments?.length === 0 ? (
