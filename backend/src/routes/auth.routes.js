@@ -10,6 +10,8 @@ import {
   forgotPasswordRequest,
   resetForgotPassword,
   changePassword,
+  updateUser,
+  updateAvatar,
 } from "../controllers/auth.controllers.js";
 import { validate } from "../middlewares/validators.middleware.js";
 import {
@@ -18,8 +20,10 @@ import {
   userChangeCurrentPasswordValidator,
   userForgotPasswordvalidator,
   userResetForgotPasswordValidator,
+  updateUserValidator,
 } from "../validators/index.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
+import { upload } from "../middlewares/multer.middleware.js";
 
 const router = Router();
 
@@ -57,5 +61,11 @@ router
 router
   .route("/resened-email-verification")
   .post(verifyJWT, resendEmailVerification);
+
+router
+  .route("/update-account")
+  .patch(verifyJWT, updateUserValidator(), validate, updateUser);
+
+router.route("/avatar").patch(verifyJWT, upload.single("avatar"), updateAvatar);
 
 export default router;

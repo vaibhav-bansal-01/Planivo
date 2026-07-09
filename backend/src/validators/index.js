@@ -98,13 +98,18 @@ const createTaskValidator = () => {
 };
 
 const createSubtaskValidator = () => {
-  return [
-    body("title").trim().notEmpty().withMessage("Title is required"),
-  ];
+  return [body("title").trim().notEmpty().withMessage("Title is required")];
 };
 
 const createNoteValidator = () => {
   return [body("content").trim().notEmpty().withMessage("Content is required")];
+};
+
+const updateUserValidator = () => {
+  return [
+    body("fullName").trim().notEmpty().withMessage("Full name is required"),
+    body("username").trim().notEmpty().withMessage("Username is required"),
+  ];
 };
 
 export {
@@ -118,4 +123,5 @@ export {
   createTaskValidator,
   createSubtaskValidator,
   createNoteValidator,
+  updateUserValidator,
 };

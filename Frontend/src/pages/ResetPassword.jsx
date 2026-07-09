@@ -19,7 +19,7 @@ function ResetPassword() {
     watch,
   } = useForm();
 
-  const password = watch("password");
+  const password = watch("newPassword");
 
   const onSubmit = async (data) => {
     setError("");
@@ -33,6 +33,7 @@ function ResetPassword() {
         navigate("/login");
       }, 2000);
     } catch (error) {
+      console.error(error);
       setError(error.response?.data?.message || "Something went wrong");
     } finally {
       setIsLoading(false);
@@ -40,7 +41,7 @@ function ResetPassword() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-blue-50 to-white px-4">
+    <div className="w-full min-h-screen flex items-center justify-center bg-linear-to-br from-blue-50 to-white px-4">
       <Card className="w-full max-w-xl rounded-[40px] px-10 py-12">
         <div className="flex flex-col items-center">
           <Logo className="w-52" />
@@ -60,9 +61,9 @@ function ResetPassword() {
             type="password"
             disabled={isLoading || !!successMessage}
             placeholder="Enter your new password"
-            error={errors.password?.message}
+            error={errors.newPassword?.message}
             icon={Lock}
-            {...register("password", {
+            {...register("newPassword", {
               required: "Password is required",
               minLength: {
                 value: 8,

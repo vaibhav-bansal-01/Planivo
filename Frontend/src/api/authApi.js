@@ -30,6 +30,22 @@ export const resetForgotPassword = (resetToken, data) =>
 export const verifyEmail = (verificationToken) =>
   api.get(`/auth/verify-email/${verificationToken}`);
 
+export const resendVerificationEmail = () => {
+  return api.post("/auth/resened-email-verification");
+};
+
 export const changePassword = (data) => {
   return api.post("/auth/change-password", data);
+};
+
+export const updateUser = (data) => {
+  return api.patch("/auth/update-account", data);
+};
+
+export const updateAvatar = (formData) => {
+  return api.patch("/auth/avatar", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
 };

@@ -7,20 +7,25 @@ import {
   FolderOpen,
   CheckSquare,
   CalendarDays,
-  Users,
+  User,
   NotebookPen,
   Plus,
+  LogOut,
   ChevronDown,
 } from "lucide-react";
 import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { logoutSuccess } from "../../features/authSlics.js";
+import { logout } from "../../api/authApi.js";
 
 function Sidebar() {
   const user = useSelector((state) => state.auth.user);
-
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [projects, setProjects] = useState([]);
   const [isCreatingProject, setIsCreatingProject] = useState(false);
   const [projectName, setProjectName] = useState("");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const fetchProjects = async () => {
     try {
@@ -57,6 +62,26 @@ function Sidebar() {
       console.error(error);
     }
   };
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+
+      dispatch(logoutSuccess());
+
+      setShowProfileMenu(false);
+
+      navigate("/login");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const [imageError, setImageError] = useState(false);
+
+  useEffect(() => {
+    setImageError(false);
+  }, [user?.avatar?.url]);
 
   return (
     <aside className="flex h-screen w-80 shrink-0 flex-col border-r border-gray-200 bg-white px-6 py-8">
@@ -101,7 +126,8 @@ function Sidebar() {
             className="flex items-center gap-2 rounded-xl px-2 py-1 text-sm font-medium text-blue-600 transition hover:bg-blue-50"
             onClick={() => setIsCreatingProject(true)}
           >
-            <Plus size={16} />Add Project
+            <Plus size={16} />
+            Add Project
           </button>
         </div>
 
@@ -136,24 +162,60 @@ function Sidebar() {
       </section>
 
       {/* ---------- User ---------- */}
-      <section className="mt-8 border-t border-gray-200 pt-6">
-        <button className="flex w-full items-center justify-between rounded-xl p-3 transition hover:bg-gray-100 cursor-pointer">
+      <section className="relative mt-8 border-t border-gray-200 pt-6">
+        <button
+          onClick={() => setShowProfileMenu((prev) => !prev)}
+          className="flex w-full cursor-pointer items-center justify-between rounded-xl p-3 transition hover:bg-gray-100"
+        >
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-600 text-sm font-semibold text-white">
-              VB
-            </div>
+            {user?.avatar?.url && !imageError ? (
+              <img
+                src={`http://localhost:8000${user.avatar.url}`}
+                alt={user.fullName}
+                className="h-10 w-10 rounded-full object-cover"
+                onError={() => setImageError(true)}
+              />
+            ) : (
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-600 text-sm font-semibold text-white">
+                {user?.fullName?.charAt(0).toUpperCase() || user?.username?.charAt(0).toUpperCase()}
+              </div>
+            )}
 
             <div className="text-left">
               <p className="text-sm font-semibold text-gray-800">
-                {user?.name}
+                {user?.fullName || user?.username}
               </p>
-
-              <p className="text-xs text-gray-500">View Profile</p>
             </div>
           </div>
 
-          <ChevronDown size={18} className="text-gray-500" />
+          <ChevronDown
+            size={18}
+            className={`transition ${showProfileMenu ? "rotate-180" : ""}`}
+          />
         </button>
+
+        {showProfileMenu && (
+          <div className="absolute bottom-16 left-0 w-full overflow-hidden rounded-xl border border-gray-200 bg-white shadow-lg">
+            <button
+              onClick={() => {
+                setShowProfileMenu(false);
+                navigate("/profile");
+              }}
+              className="flex w-full items-center gap-3 px-4 py-3 text-sm transition hover:bg-gray-50"
+            >
+              <User size={18} />
+              View Profile
+            </button>
+
+            <button
+              onClick={handleLogout}
+              className="flex w-full items-center gap-3 px-4 py-3 text-sm text-red-600 transition hover:bg-red-50"
+            >
+              <LogOut size={18} />
+              Logout
+            </button>
+          </div>
+        )}
       </section>
     </aside>
   );

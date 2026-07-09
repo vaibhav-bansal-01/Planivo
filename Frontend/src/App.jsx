@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import AppRoutes from "./routes/AppRoutes";
 import { getCurrentUser } from "./api/authApi";
-import { loginSuccess, logout, setInitialized } from "./features/authSlics.js";
+import { loginSuccess, logoutSuccess, setInitialized } from "./features/authSlics.js";
 import "./App.css";
 
 function App() {
@@ -12,9 +12,9 @@ function App() {
     const fetchCurrentUser = async () => {
       try {
         const response = await getCurrentUser();
-        dispatch(loginSuccess(response.data.data.user));
+        dispatch(loginSuccess(response.data.data));
       } catch (error) {
-        dispatch(logout());
+        dispatch(logoutSuccess());
       } finally {
         dispatch(setInitialized());
       }

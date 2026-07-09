@@ -8,7 +8,7 @@ import {
   sendEmail,
 } from "../utils/mail.js";
 import jwt from "jsonwebtoken";
-import crypto from "crypto"
+import crypto from "crypto";
 
 const generateJWT = async (userId) => {
   try {
@@ -54,12 +54,14 @@ const registerUser = asyncHandler(async (req, res) => {
 
   await user.save({ validateBeforeSave: false });
 
+  const verificationUrl = `${process.env.FRONTEND_URL}/verify-email/${unHashedToken}`;
+
   await sendEmail({
     email: user?.email,
     subject: "Please verify your email",
     mailgenContent: emailVerificationMailgenContent(
       user.username,
-      `${process.env.EMAIL_VERIFICATION_REDIRECT_URL}/${unHashedToken}`,
+      verificationUrl,
     ),
   });
 
@@ -215,14 +217,16 @@ const resendEmailVerification = asyncHandler(async (req, res) => {
   user.emailVerificationToken = hashedToken;
   user.emailVerificationExpiry = tokenExpiry;
 
+  const verificationUrl = `${process.env.FRONTEND_URL}/verify-email/${unHashedToken}`;
+
   await user.save({ validateBeforeSave: false });
 
   await sendEmail({
-    email: user?.email,
+    email: user.email,
     subject: "Please verify your email",
     mailgenContent: emailVerificationMailgenContent(
       user.username,
-      `${req.protocol}://${req.get("host")}/api/v1/users/verify-email/${unHashedToken}`,
+      verificationUrl,
     ),
   });
 
@@ -238,7 +242,8 @@ const resendEmailVerification = asyncHandler(async (req, res) => {
 });
 
 const refreshAccessToken = asyncHandler(async (req, res) => {
-  const incomingRefreshToken = req.cookies?.refreshToken || req.body.refreshToken;
+  const incomingRefreshToken =
+    req.cookies?.refreshToken || req.body.refreshToken;
 
   if (!incomingRefreshToken) {
     throw new ApiError(401, "Unauthorized access");
@@ -270,7 +275,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     );
 
     user.refreshToken = newRefreshToken;
-    await user.save({validateBeforeSave: false});
+    await user.save({ validateBeforeSave: false });
 
     return res
       .status(200)
@@ -306,6 +311,8 @@ const forgotPasswordRequest = asyncHandler(async (req, res) => {
   user.forgotPasswordToken = hashedToken;
   user.forgotPasswordExpiry = tokenExpiry;
 
+  const verificationUrl = `${process.env.FRONTEND_URL}/reset-password/${unHashedToken}`;
+
   await user.save({ validateBeforeSave: false });
 
   await sendEmail({
@@ -313,7 +320,7 @@ const forgotPasswordRequest = asyncHandler(async (req, res) => {
     subject: "Forgot Password",
     mailgenContent: forgotPasswordMailgenContent(
       user.username,
-      `${process.env.FORGOT_PASSWORD_REDIRECT_URL}/${unHashedToken}`,
+      verificationUrl
     ),
   });
 
@@ -381,6 +388,54 @@ const changePassword = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, {}, "Password changed successfully"));
 });
 
+const updateUser = asyncHandler(async (req, res) => {
+  const { fullName, username } = req.body;
+
+  const user = await User.findByIdAndUpdate(
+    req.user._id,
+    {
+      fullName,
+      username,
+    },
+    {
+      new: true,
+    },
+  ).select(
+    "-password -refreshToken -emailVerificationToken -emailVerificationExpiry",
+  );
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, user, "Profile updated successfully"));
+});
+
+const updateAvatar = asyncHandler(async (req, res) => {
+  if (!req.file) {
+    throw new ApiError(400, "Avatar is required");
+  }
+
+  const avatarUrl = `/images/${req.file.filename}`;
+
+  const user = await User.findByIdAndUpdate(
+    req.user._id,
+    {
+      avatar: {
+        url: avatarUrl,
+        localPath: req.file.path,
+      },
+    },
+    {
+      new: true,
+    },
+  ).select(
+    "-password -refreshToken -emailVerificationToken -emailVerificationExpiry",
+  );
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, user, "Avatar updated successfully"));
+});
+
 export {
   registerUser,
   login,
@@ -392,4 +447,6 @@ export {
   forgotPasswordRequest,
   resetForgotPassword,
   changePassword,
+  updateUser,
+  updateAvatar,
 };
