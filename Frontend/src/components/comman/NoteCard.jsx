@@ -2,8 +2,11 @@ import React, { useEffect, useState } from "react";
 import { StickyNote, Plus } from "lucide-react";
 import { Card, Button, Input, NoteItem } from "../index.js";
 import { getProjectNotes, createNote } from "../../api/notesApi.js";
+import { getProjectById } from "../../api/projectApi.js";
+import { canCreateNote } from "../../utils/permissions.js";
 
 function NoteCard({ projectId }) {
+  const [project, setProject] = useState(null);
   const [notes, setNotes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -13,9 +16,12 @@ function NoteCard({ projectId }) {
     try {
       setLoading(true);
 
-      const response = await getProjectNotes(projectId);
-
-      setNotes(response.data.data || []);
+      const [projectRes, notesRes] = await Promise.all([
+        getProjectById(projectId),
+        getProjectNotes(projectId),
+      ]);
+      setProject(projectRes.data.data);
+      setNotes(notesRes.data.data || []);
     } catch (error) {
       console.error(error);
     } finally {
@@ -30,7 +36,6 @@ function NoteCard({ projectId }) {
   }, [projectId]);
 
   const handleCreate = async () => {
-
     try {
       await createNote(projectId, {
         content,
@@ -51,14 +56,15 @@ function NoteCard({ projectId }) {
 
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-semibold text-gray-900">Notes</h2>
-
-        <Button
-          className="px-5 py-2 text-base"
-          onClick={() => setShowForm((prev) => !prev)}
-        >
-          <Plus size={18} />
-          Add Note
-        </Button>
+        {canCreateNote(project?.currentUser.role) && (
+          <Button
+            className="px-5 py-2 text-base"
+            onClick={() => setShowForm((prev) => !prev)}
+          >
+            <Plus size={18} />
+            Add Note
+          </Button>
+        )}
       </div>
 
       {/* Add Form */}
@@ -96,7 +102,7 @@ function NoteCard({ projectId }) {
 
       {loading ? (
         <div className="py-10 text-center text-gray-500">Loading notes...</div>
-      ) : (notes.length === 0 && !showForm) ? (
+      ) : notes.length === 0 && !showForm ? (
         <div className="flex flex-col items-center justify-center py-12 text-center">
           <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-gray-100">
             <StickyNote className="h-8 w-8 text-orange-400" />
@@ -116,6 +122,7 @@ function NoteCard({ projectId }) {
               key={note._id}
               note={note}
               projectId={projectId}
+              project={project}
               refresh={fetchNotes}
             />
           ))}

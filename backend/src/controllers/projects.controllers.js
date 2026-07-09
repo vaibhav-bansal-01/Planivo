@@ -70,9 +70,23 @@ const getProjectById = asyncHandler(async (req, res) => {
     throw new ApiError(404, "Project not found");
   }
 
+  const membership = await ProjectMember.findOne({
+    project: projectId,
+    user: req.user._id,
+  });
+
+  if (!membership)
+    throw new ApiError(403, "You are not a member of this project");
+
+  const projectObj = project.toObject();
+
+  projectObj.currentUser = {
+    role: membership.role,
+  };
+
   return res
     .status(200)
-    .json(new ApiResponse(200, project, "Project found successfully"));
+    .json(new ApiResponse(200, projectObj, "Project found successfully"));
 });
 
 const createProject = asyncHandler(async (req, res) => {

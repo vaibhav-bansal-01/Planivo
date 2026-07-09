@@ -3,8 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { Card, Button } from "../index.js";
 import { MoreVertical } from "lucide-react";
 import { deleteTask } from "../../api/tasksApi";
+import { canUpdateTask, canDeleteTask } from "../../utils/permissions.js";
 
-function TaskHero({ task }) {
+function TaskHero({ task, project }) {
   const navigate = useNavigate();
 
   const [showMenu, setShowMenu] = useState(false);
@@ -37,12 +38,14 @@ function TaskHero({ task }) {
           </div>
 
           <div className="relative">
-            <button
-              onClick={() => setShowMenu((prev) => !prev)}
-              className="rounded-xl p-2 transition hover:bg-gray-100"
-            >
-              <MoreVertical size={20} />
-            </button>
+            {canUpdateTask(project.currentUser.role) && (
+              <button
+                onClick={() => setShowMenu((prev) => !prev)}
+                className="rounded-xl p-2 transition hover:bg-gray-100"
+              >
+                <MoreVertical size={20} />
+              </button>
+            )}
 
             {showMenu && (
               <div className="absolute right-0 z-10 mt-2 w-48 overflow-hidden rounded-xl border border-gray-200 bg-white shadow-lg">

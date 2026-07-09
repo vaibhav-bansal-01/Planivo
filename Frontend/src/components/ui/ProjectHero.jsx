@@ -1,7 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { AvatarGroup, Button, Card, Input, ManageMembersModal } from "../index.js";
+import {
+  AvatarGroup,
+  Button,
+  Card,
+  Input,
+  ManageMembersModal,
+} from "../index.js";
 import { MoreVertical, Users } from "lucide-react";
+import { canUpdateProject, canDeleteProject } from "../../utils/permissions.js";
 
 import { updateProject, deleteProject } from "../../api/projectApi";
 
@@ -99,78 +106,81 @@ function ProjectHero({ project, projectId, members, setProject }) {
             </div>
 
             {/* MENU */}
-            <div className="relative">
-              {!isEditing ? (
-                <>
-                  <button
-                    onClick={() => setShowMenu((prev) => !prev)}
-                    className="rounded-xl p-2 transition hover:bg-gray-100"
-                  >
-                    <MoreVertical size={22} />
-                  </button>
+            {canUpdateProject(project?.currentUser?.role) && (
+              <div className="relative">
+                {!isEditing ? (
+                  <>
+                    <button
+                      onClick={() => setShowMenu((prev) => !prev)}
+                      className="rounded-xl p-2 transition hover:bg-gray-100"
+                    >
+                      <MoreVertical size={22} />
+                    </button>
 
-                  {showMenu && (
-                    <div className="absolute right-0 mt-2 w-48 overflow-hidden rounded-xl border bg-white shadow-lg">
-                      <button
-                        className="w-full px-4 py-3 text-left hover:bg-gray-100"
-                        onClick={() => {
-                          setShowMenu(false);
-                          setIsEditing(true);
-                        }}
-                      >
-                        ✏ Edit Project
-                      </button>
+                    {showMenu && (
+                      <div className="absolute right-0 mt-2 w-48 overflow-hidden rounded-xl border bg-white shadow-lg">
+                        <button
+                          className="w-full px-4 py-3 text-left hover:bg-gray-100"
+                          onClick={() => {
+                            setShowMenu(false);
+                            setIsEditing(true);
+                          }}
+                        >
+                          ✏ Edit Project
+                        </button>
 
-                      <button
-                        className="w-full px-4 py-3 text-left text-red-600 hover:bg-red-50"
-                        onClick={() => {
-                          setShowMenu(false);
-                          setShowDeleteModal(true);
-                        }}
-                      >
-                        Delete Project
-                      </button>
-                    </div>
-                  )}
-                </>
-              ) : (
-                <div className="flex gap-3">
-                  <Button
-                    className="w-auto px-5 py-3 text-base"
-                    onClick={() => {
-                      setProjectName(project.name);
-                      setProjectDescription(project.description || "");
-                      setIsEditing(false);
-                    }}
-                  >
-                    Cancel
-                  </Button>
+                        <button
+                          className="w-full px-4 py-3 text-left text-red-600 hover:bg-red-50"
+                          onClick={() => {
+                            setShowMenu(false);
+                            setShowDeleteModal(true);
+                          }}
+                        >
+                          Delete Project
+                        </button>
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <div className="flex gap-3">
+                    <Button
+                      className="w-auto px-5 py-3 text-base"
+                      onClick={() => {
+                        setProjectName(project.name);
+                        setProjectDescription(project.description || "");
+                        setIsEditing(false);
+                      }}
+                    >
+                      Cancel
+                    </Button>
 
-                  <Button
-                    className="w-auto px-5 py-3 text-base"
-                    disabled={!hasChanges}
-                    onClick={handleUpdateProject}
-                  >
-                    Save
-                  </Button>
-                </div>
-              )}
-            </div>
+                    <Button
+                      className="w-auto px-5 py-3 text-base"
+                      disabled={!hasChanges}
+                      onClick={handleUpdateProject}
+                    >
+                      Save
+                    </Button>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
 
           {/* BOTTOM */}
           <div className="mt-10 flex items-center justify-between">
             <AvatarGroup members={members} count={5} />
-
-            <Button
-              className="w-auto px-6 py-3 text-base font-semibold"
-              onClick={() => setShowMembersModal(true)}
-            >
-              <div className="flex items-center gap-2">
-                <Users size={18} />
-                Manage Members
-              </div>
-            </Button>
+            {canUpdateProject(project.currentUser.role) && (
+              <Button
+                className="w-auto px-6 py-3 text-base font-semibold"
+                onClick={() => setShowMembersModal(true)}
+              >
+                <div className="flex items-center gap-2">
+                  <Users size={18} />
+                  Manage Members
+                </div>
+              </Button>
+            )}
           </div>
         </div>
       </Card>

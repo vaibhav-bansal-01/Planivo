@@ -3,8 +3,9 @@ import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 
 import { Button, Input } from "../index.js";
 import { updateNote, deleteNote } from "../../api/notesApi.js";
+import { canUpdateNote, canDeleteNote } from "../../utils/permissions.js";
 
-function NoteItem({ note, projectId, refresh }) {
+function NoteItem({ note, projectId, refresh, project }) {
   const [showMenu, setShowMenu] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
 
@@ -94,12 +95,14 @@ function NoteItem({ note, projectId, refresh }) {
         </div>
 
         <div className="relative">
-          <button
-            onClick={() => setShowMenu((prev) => !prev)}
-            className="rounded-lg p-2 transition hover:bg-gray-100"
-          >
-            <MoreHorizontal size={18} />
-          </button>
+          {canUpdateNote(project?.currentUser.role) && (
+            <button
+              onClick={() => setShowMenu((prev) => !prev)}
+              className="rounded-lg p-2 transition hover:bg-gray-100"
+            >
+              <MoreHorizontal size={18} />
+            </button>
+          )}
 
           {showMenu && (
             <div className="absolute right-0 mt-2 w-40 overflow-hidden rounded-xl border border-gray-200 bg-white shadow-lg">

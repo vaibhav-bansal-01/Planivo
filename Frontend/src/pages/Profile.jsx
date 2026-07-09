@@ -172,8 +172,7 @@ function Profile() {
 
       <div className="grid gap-8 lg:grid-cols-12">
         {/* LEFT PANEL */}
-
-        <div className="lg:col-span-4">
+        <div className="lg:col-span-4 ">
           <Card className="p-8">
             <h2 className="mb-8 text-xl font-bold">Profile Overview</h2>
 

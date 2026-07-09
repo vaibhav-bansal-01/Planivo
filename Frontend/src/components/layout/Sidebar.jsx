@@ -84,7 +84,7 @@ function Sidebar() {
   }, [user?.avatar?.url]);
 
   return (
-    <aside className="flex h-screen w-80 shrink-0 flex-col border-r border-gray-200 bg-white px-6 py-8">
+    <aside className="fixed left-0 top-0 h-screen w-80 border-r border-gray-200 bg-white px-6 py-8">
       {/* ---------- Logo ---------- */}
       <div className="mb-12 flex justify-center">
         <Logo className="w-40" />
@@ -109,9 +109,6 @@ function Sidebar() {
             My Tasks
           </SidebarItem>
 
-          <SidebarItem to="/calendar" icon={CalendarDays}>
-            Calendar
-          </SidebarItem>
         </nav>
       </section>
 
@@ -162,7 +159,7 @@ function Sidebar() {
       </section>
 
       {/* ---------- User ---------- */}
-      <section className="relative mt-8 border-t border-gray-200 pt-6">
+      <section className="absolute bottom-8 left-6 right-6 border-t border-gray-200 pt-6 bg-white">
         <button
           onClick={() => setShowProfileMenu((prev) => !prev)}
           className="flex w-full cursor-pointer items-center justify-between rounded-xl p-3 transition hover:bg-gray-100"

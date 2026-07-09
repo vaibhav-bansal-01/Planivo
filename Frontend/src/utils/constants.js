@@ -5,4 +5,10 @@ const TASK_STATUS = {
   DONE: "done",
 };
 
-export default TASK_STATUS;
+const PROJECT_ROLES = {
+  ADMIN: "ADMIN",
+  PROJECT_ADMIN: "PROJECT_ADMIN",
+  MEMBER: "MEMBER",
+};
+
+export default { TASK_STATUS, PROJECT_ROLES };

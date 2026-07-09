@@ -10,11 +10,12 @@ import {
   NoteCard,
 } from "../components";
 
+import { getProjectById } from "../api/projectApi.js";
 import { getTaskById } from "../api/tasksApi";
 
 function TaskDetails() {
   const { projectId, taskId } = useParams();
-
+  const [project, setProject] = useState(null);
   const [task, setTask] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -22,9 +23,12 @@ function TaskDetails() {
     try {
       setLoading(true);
 
-      const response = await getTaskById(projectId, taskId);
-
-      setTask(response.data.data);
+      const [projectRes, taskRes] = await Promise.all([
+        getProjectById(projectId),
+        getTaskById(projectId, taskId),
+      ]);
+      setProject(projectRes.data.data);
+      setTask(taskRes.data.data);
     } catch (error) {
       console.error(error);
     } finally {
@@ -59,7 +63,7 @@ function TaskDetails() {
       <div className="grid grid-cols-3 gap-6">
         {/* Left Column */}
         <div className="col-span-2 space-y-6">
-          <TaskHero task={task} />
+          <TaskHero task={task} project={project} />
 
           <SubTaskCard  projectId={projectId} taskId={taskId} />  
 
