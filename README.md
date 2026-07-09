@@ -1,4 +1,3 @@
-<img width="1918" height="968" alt="Screenshot 2026-07-10 001327" src="https://github.com/user-attachments/assets/ffac2d1c-1479-4741-aa7b-064e28a4fb69" />
 # 🚀 Planivo
 
 **Plan smarter. Collaborate better. Deliver faster.**
